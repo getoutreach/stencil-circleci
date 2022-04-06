@@ -3,3 +3,25 @@ arguments:
   prerelease:
     description: Enables pre-releasing via semantic-release
     type: boolean
+  type:
+    required: true
+    type: list
+    description: Type of repository, can be multiple types.
+  resources.postgres:
+    type: string
+    description: Postgres version to use
+  resources.mysql:
+    type: string
+    description: MySQL version to use
+  resources.redis:
+    type: string
+    description: Redis version to use
+  resources.dynamo:
+    type: string
+    description: DynamoDB version to use
+  resources.s3:
+    type: string
+    description: Minio version to use
+  resources.kafka:
+    type: string
+    description: Kafka version to use
