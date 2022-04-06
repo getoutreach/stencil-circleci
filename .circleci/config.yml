@@ -47,12 +47,14 @@ workflows:
     jobs:
       - release-dryrun:
           ###Block(releaseDryrunConfig)
+          context: ghaccesstoken
           filters:
             branches:
               ignore: main
           ###EndBlock(releaseDryrunConfig)
       - release:
           ###Block(releaseConfig)
+          context: ghaccesstoken
           filters:
             branches:
               only: main
