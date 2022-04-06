@@ -1,0 +1,5 @@
+name: stencil-circleci
+arguments:
+  reportingTeam: fnd-dtss
+modules:
+  - name: github.com/getoutreach/stencil-template-base
