@@ -3,7 +3,7 @@ version: 2.1
 {{- $isService := eq (stencil.ApplyTemplate "isService") "true" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 orbs:
-  shared: getoutreach/shared@dev:first
+  shared: getoutreach/shared@1.56.0
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -55,6 +55,9 @@ workflows:
           dryrun: false
           context: *contexts
           requires:
+            ###Block(circleReleaseRequires)
+{{ file.Block "circleReleaseRequires" }}
+            ###EndBlock(circleReleaseRequires)
             - shared/test
         {{- /* TODO(jaredallard): We'll need to migrate this into the go module */}}
         {{- if and (has "grpc" (stencil.Arg "type")) (has "node" (stencil.Arg "grpcClients")) }}
