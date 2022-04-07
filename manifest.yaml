@@ -1,6 +1,6 @@
 name: github.com/getoutreach/stencil-circleci
 arguments:
-  prerelease:
+  releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
     type: boolean
   type:

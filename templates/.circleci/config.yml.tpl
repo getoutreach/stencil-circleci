@@ -1,7 +1,7 @@
 # Please re-run stencil after any changes to this file.
 version: 2.1
 {{- $isService := eq (stencil.ApplyTemplate "isService") "true" }}
-{{- $prereleases := stencil.Arg "prerelease" }}
+{{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 orbs:
   shared: getoutreach/shared@dev:first
 
