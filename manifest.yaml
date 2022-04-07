@@ -3,6 +3,9 @@ arguments:
   releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
     type: boolean
+  releaseOptions.prereleases.cron:
+    description: Cron expression for automatic merging of the default branch into release
+    type: string
   type:
     required: true
     type: list

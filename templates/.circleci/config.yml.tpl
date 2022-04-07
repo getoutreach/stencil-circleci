@@ -39,7 +39,8 @@ workflows:
   release_branch:
     triggers:
       - schedule:
-          cron: "0 0 * * *"
+          {{- /* First of the month */}}
+          cron: {{ stencil.Arg "releaseOptions.prereleases.cron" | default "0 0 1 * *" }}
           filters:
             branches:
               only:
