@@ -51,6 +51,9 @@ workflows:
 
   release:
     jobs:
+      ###Block(circleWorkflowJobs)
+{{ file.Block "circleWorkflowJobs" }}
+      ###EndBlock(circleWorkflowJobs)
       - shared/release:
           dryrun: false
           context: *contexts
