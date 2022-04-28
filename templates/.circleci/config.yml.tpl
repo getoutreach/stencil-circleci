@@ -10,7 +10,10 @@ contexts: &contexts
   {{- /* Ensure we generate a valid structure if no block or module hook entries */}}
   {{ if and (empty (file.Block "extraContexts")) (empty (stencil.GetModuleHook "contexts")) }}[]{{ end }}
   ### Start contexts inserted by other modules
-{{ stencil.GetModuleHook "contexts" | toYaml | indent 2 }}
+{{- $contextsHook := (stencil.GetModuleHook "contexts") }}
+{{- if $contextsHook }}
+{{ toYaml $contextsHook | indent 2 }}
+{{- end }}
   ### End contexts inserted by other modules
   ###Block(extraContexts)
 {{ file.Block "extraContexts"}}
@@ -22,7 +25,10 @@ jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook 
   ###EndBlock(circleJobs)
 
   ### Start jobs inserted by other modules
-{{ stencil.GetModuleHook "jobs" | toYaml | indent 2 }}
+{{- $jobsHook := (stencil.GetModuleHook "jobs") }}
+{{- if $jobsHook }}
+{{ toYaml $jobsHook | indent 2 }}
+{{- end }}
   ### End jobs inserted by other modules
 
 workflows:
@@ -32,7 +38,10 @@ workflows:
   ###EndBlock(circleWorkflows)
 
   ### Start workflows inserted by other modules
-{{ stencil.GetModuleHook "workflows" | toYaml | indent 2 }}
+{{- $workflowsHook := (stencil.GetModuleHook "workflows") }}
+{{- if $workflowsHook }}
+{{ toYaml $workflowsHook | indent 2 }}
+{{- end }}
   ### End workflows inserted by other modules
 
   {{- if $prereleases }}
