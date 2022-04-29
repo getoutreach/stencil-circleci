@@ -1,5 +1,10 @@
 name: stencil-circleci
 arguments:
   reportingTeam: fnd-dtss
+  releaseOptions:
+    enablePrereleases: true
 modules:
   - name: github.com/getoutreach/stencil-template-base
+replacements:
+  # Run ourself... on ourself :D
+  github.com/getoutreach/stencil-circleci: ./

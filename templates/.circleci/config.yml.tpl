@@ -3,7 +3,7 @@ version: 2.1
 {{- $isService := eq (stencil.ApplyTemplate "isService") "true" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 orbs:
-  shared: getoutreach/shared@1.57.1
+  shared: getoutreach/shared@1.60.0
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
