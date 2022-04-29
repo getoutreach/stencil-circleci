@@ -55,7 +55,9 @@ workflows:
               only:
                 - release
     jobs:
-      - shared/merge_into_release
+      - shared/merge:
+          head: release
+          base: main
   {{- end }}
 
   release:
