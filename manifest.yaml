@@ -1,4 +1,5 @@
 name: github.com/getoutreach/stencil-circleci
+###Block(keys)
 arguments:
   releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
@@ -28,3 +29,4 @@ arguments:
   resources.kafka:
     type: string
     description: Kafka version to use
+###EndBlock(keys)
