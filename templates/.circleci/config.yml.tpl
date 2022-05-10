@@ -44,22 +44,6 @@ workflows:
 {{- end }}
   ### End workflows inserted by other modules
 
-  {{- if $prereleases }}
-  release_branch:
-    triggers:
-      - schedule:
-          {{- /* 15th of the month */}}
-          cron: {{ stencil.Arg "releaseOptions.prereleases.cron" | default "0 0 15 * *" }}
-          filters:
-            branches:
-              only:
-                - release
-    jobs:
-      - shared/merge:
-          head: release
-          base: main
-  {{- end }}
-
   release:
     jobs:
       ###Block(circleWorkflowJobs)
