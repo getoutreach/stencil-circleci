@@ -11,6 +11,9 @@ arguments:
     required: true
     type: list
     description: Type of repository, can be multiple types.
+  grpcClients:
+    type: list
+    description: gRPC clients to generate. Used to run tests on gRPC clients.
   resources.postgres:
     type: string
     description: Postgres version to use
