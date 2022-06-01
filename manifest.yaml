@@ -7,10 +7,12 @@ arguments:
   releaseOptions.prereleases.cron:
     description: Cron expression for automatic merging of the default branch into release
     type: string
-  type:
-    required: true
+  service:
+    type: bool
+    description: Is this a service or not
+  serviceActivities:
     type: list
-    description: Type of repository, can be multiple types.
+    description: List of service activities to enable
   grpcClients:
     type: list
     description: gRPC clients to generate. Used to run tests on gRPC clients.

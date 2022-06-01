@@ -1,6 +1,6 @@
 # Please re-run stencil after any changes to this file.
 version: 2.1
-{{- $isService := eq (stencil.ApplyTemplate "isService") "true" }}
+{{- $isService := stencil.Arg "service" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 orbs:
   shared: getoutreach/shared@1.60.0
@@ -61,7 +61,7 @@ workflows:
             ###EndBlock(circleReleaseRequires)
             - shared/test
         {{- /* TODO(jaredallard): We'll need to migrate this into the go module */}}
-        {{- if and (has "grpc" (stencil.Arg "type")) (has "node" (stencil.Arg "grpcClients")) }}
+        {{- if and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
             - shared/test-node-client
         {{- end }}
           filters:
