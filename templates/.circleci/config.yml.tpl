@@ -2,6 +2,7 @@
 version: 2.1
 {{- $isService := stencil.Arg "service" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
+{{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
   shared: getoutreach/shared@1.65.0
 
@@ -49,6 +50,13 @@ workflows:
       ###Block(circleWorkflowJobs)
 {{ file.Block "circleWorkflowJobs" }}
       ###EndBlock(circleWorkflowJobs)
+      {{- if $testNodeClient }}
+      - shared/test-node-client:
+          requires:
+            ###Block(testNodeRequires)
+{{ file.Block "testNodeRequires" | fromYaml | toYaml | indent 12 }}
+            ###EndBlock(testNodeRequires)
+      {{- end }}
       - shared/release: &release
           dryrun: false
           context: *contexts
@@ -60,8 +68,7 @@ workflows:
 {{ file.Block "circleReleaseRequires" }}
             ###EndBlock(circleReleaseRequires)
             - shared/test
-        {{- /* TODO(jaredallard): We'll need to migrate this into the go module */}}
-        {{- if and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
+        {{- if $testNodeClient }}
             - shared/test-node-client
         {{- end }}
           filters:
