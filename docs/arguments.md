@@ -50,6 +50,6 @@ A list of gRPC clients to run tests for.
 
 ```yaml
 grpcClients:
-- node
-- ruby
+  - node
+  - ruby
 ```

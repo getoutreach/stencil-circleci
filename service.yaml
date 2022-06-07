@@ -1,8 +1,10 @@
 name: stencil-circleci
 arguments:
   reportingTeam: fnd-dtss
+  description: Stencil Module for CircleCI
   releaseOptions:
     enablePrereleases: true
+    allowMajorVersions: true
 modules:
   - name: github.com/getoutreach/stencil-template-base
 replacements:

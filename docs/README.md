@@ -5,14 +5,14 @@ A stencil module for interacting with CircleCI for application development.
 ## Structure
 
 This module takes an opinionated approach to what types of jobs are ran in CI/CD.
- 
+
 ### Jobs
 
-* **shared/test**: Runs tests for the project.
-* **shared/e2e**: Runs end-to-end tests for all packages in the project.
-* **shared/docker**: Builds and pushes Docker images for all packages in the project. Runs on tag creation.
-* **shared/release**: Creates tags/releases for the project and pushes them to GitHub.
-* **shared/finalize-coverage**: Finalizes the coverage report for the project and submits it (currently coveralls only).
+- **shared/test**: Runs tests for the project.
+- **shared/e2e**: Runs end-to-end tests for all packages in the project.
+- **shared/docker**: Builds and pushes Docker images for all packages in the project. Runs on tag creation.
+- **shared/release**: Creates tags/releases for the project and pushes them to GitHub.
+- **shared/finalize-coverage**: Finalizes the coverage report for the project and submits it (currently coveralls only).
 
 All of the above jobs are codified in the CircleCI orb located in [devbase](https://github.com/getoutreach/devbase/tree/main/orbs/shared). The documentation for each step and how they work is located there.
 
