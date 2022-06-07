@@ -3,7 +3,7 @@ version: 2.1
 {{- $isService := stencil.Arg "service" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 orbs:
-  shared: getoutreach/shared@1.60.0
+  shared: getoutreach/shared@1.65.0
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -87,25 +87,6 @@ workflows:
       - shared/test:
           context: *contexts
           app_name: {{ .Config.Name }}
-          {{- if stencil.Arg "resources.postgres" }}
-          postgres_version: {{ stencil.Arg "resources.postgres" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.mysql" }}
-          mysql_version: {{ stencil.Arg "resources.mysql" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.redis" }}
-          redis_version: {{ stencil.Arg "resources.redis" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.kafka" }}
-          kafka_version: {{ stencil.Arg "resources.kafka" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.s3" }}
-          minio_version: {{ stencil.Arg "resources.minio" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.dynamo" }}
-          localstack_version: {{ stencil.Arg "resources.dynamo" }}
-          localstack_services: dyanmodb
-          {{- end }}
 
       - shared/publish_docs:
           context: *contexts
