@@ -2,8 +2,9 @@
 version: 2.1
 {{- $isService := stencil.Arg "service" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
+{{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@1.60.0
+  shared: getoutreach/shared@1.65.0
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -49,6 +50,13 @@ workflows:
       ###Block(circleWorkflowJobs)
 {{ file.Block "circleWorkflowJobs" }}
       ###EndBlock(circleWorkflowJobs)
+      {{- if $testNodeClient }}
+      - shared/test-node-client:
+          requires:
+            ###Block(testNodeRequires)
+{{ file.Block "testNodeRequires" | fromYaml | toYaml | indent 12 }}
+            ###EndBlock(testNodeRequires)
+      {{- end }}
       - shared/release: &release
           dryrun: false
           context: *contexts
@@ -60,8 +68,7 @@ workflows:
 {{ file.Block "circleReleaseRequires" }}
             ###EndBlock(circleReleaseRequires)
             - shared/test
-        {{- /* TODO(jaredallard): We'll need to migrate this into the go module */}}
-        {{- if and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
+        {{- if $testNodeClient }}
             - shared/test-node-client
         {{- end }}
           filters:
@@ -87,25 +94,6 @@ workflows:
       - shared/test:
           context: *contexts
           app_name: {{ .Config.Name }}
-          {{- if stencil.Arg "resources.postgres" }}
-          postgres_version: {{ stencil.Arg "resources.postgres" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.mysql" }}
-          mysql_version: {{ stencil.Arg "resources.mysql" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.redis" }}
-          redis_version: {{ stencil.Arg "resources.redis" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.kafka" }}
-          kafka_version: {{ stencil.Arg "resources.kafka" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.s3" }}
-          minio_version: {{ stencil.Arg "resources.minio" }}
-          {{- end }}
-          {{- if stencil.Arg "resources.dynamo" }}
-          localstack_version: {{ stencil.Arg "resources.dynamo" }}
-          localstack_services: dyanmodb
-          {{- end }}
 
       - shared/publish_docs:
           context: *contexts
