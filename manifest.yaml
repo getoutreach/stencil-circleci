@@ -3,35 +3,22 @@ name: github.com/getoutreach/stencil-circleci
 arguments:
   releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
-    type: boolean
-  releaseOptions.prereleases.cron:
-    description: Cron expression for automatic merging of the default branch into release
-    type: string
+    schema:
+      type: boolean
   service:
-    type: bool
     description: Is this a service or not
+    schema:
+      type: boolean
   serviceActivities:
-    type: list
     description: List of service activities to enable
+    schema:
+      type: array
+      items:
+        type: string
   grpcClients:
-    type: list
+    schema:
+      type: array
+      items:
+        type: string
     description: gRPC clients to generate. Used to run tests on gRPC clients.
-  resources.postgres:
-    type: string
-    description: Postgres version to use
-  resources.mysql:
-    type: string
-    description: MySQL version to use
-  resources.redis:
-    type: string
-    description: Redis version to use
-  resources.dynamo:
-    type: string
-    description: DynamoDB version to use
-  resources.s3:
-    type: string
-    description: Minio version to use
-  resources.kafka:
-    type: string
-    description: Kafka version to use
 ###EndBlock(keys)
