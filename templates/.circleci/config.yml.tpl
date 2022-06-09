@@ -1,4 +1,5 @@
-# Please re-run stencil after any changes to this file.
+# Please re-run stencil after any changes to this file as invalid
+# syntax, such as anchors, will be fixed automatically.
 version: 2.1
 {{- $isService := stencil.Arg "service" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
@@ -8,17 +9,25 @@ orbs:
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
-  {{- /* Ensure we generate a valid structure if no block or module hook entries */}}
-  {{ if and (empty (file.Block "extraContexts")) (empty (stencil.GetModuleHook "contexts")) }}[]{{ end }}
-  ### Start contexts inserted by other modules
-{{- $contextsHook := (stencil.GetModuleHook "contexts") }}
-{{- if $contextsHook }}
-{{ toYaml $contextsHook | indent 2 }}
+{{- $userContexts := (file.Block "extraContexts" | fromYaml) }}
+{{- $contexts := (stencil.ApplyTemplate "contexts" | fromYaml | uniq) }}
+{{- if $contexts }}
+  {{- /* If we have user contexts, ensure that we don't duplicate builtin ones */}}
+  {{- /* We also have to persist their context in the extra contexts list, so we */}}
+  {{- /* process the supplied contexts list */}}
+  {{- range $contexts }}
+    {{- if not (has . $userContexts) }}
+  - {{ . }}
+    {{- end }}
+  {{- end }}
+{{- else }}
+  {{- /* Always generate an array if there are no contexts */}}
+  []
 {{- end }}
-  ### End contexts inserted by other modules
   ###Block(extraContexts)
-{{ file.Block "extraContexts"}}
+{{ $userContexts | toYaml | indent 2 }}
   ###EndBlock(extraContexts)
+
 
 jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook "jobs")) }} {} {{ end }}
   ###Block(circleJobs)
