@@ -60,7 +60,7 @@ workflows:
 {{ file.Block "circleWorkflowJobs" }}
       ###EndBlock(circleWorkflowJobs)
       {{- if $testNodeClient }}
-      - shared/test-node-client:
+      - shared/test_node_client:
           requires:
             ###Block(testNodeRequires)
 {{ file.Block "testNodeRequires" | fromYaml | toYaml | indent 12 }}
@@ -78,7 +78,7 @@ workflows:
             ###EndBlock(circleReleaseRequires)
             - shared/test
         {{- if $testNodeClient }}
-            - shared/test-node-client
+            - shared/test_node_client
         {{- end }}
           filters:
             branches:
