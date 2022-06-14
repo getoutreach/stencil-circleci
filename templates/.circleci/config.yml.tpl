@@ -5,7 +5,7 @@ version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@1.65.0
+  shared: getoutreach/shared@1.65.5
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -61,9 +61,14 @@ workflows:
       ###EndBlock(circleWorkflowJobs)
       {{- if $testNodeClient }}
       - shared/test_node_client:
+          context: *contexts
+          steps:
+            ###Block(testNodeClientSteps)
+{{ file.Block "testNodeClientSteps" | default "[]" | fromYaml | toYaml | indent 12 }}
+            ###EndBlock(testNodeClientSteps)
           requires:
             ###Block(testNodeRequires)
-{{ file.Block "testNodeRequires" | fromYaml | toYaml | indent 12 }}
+{{ file.Block "testNodeRequires" | default "[]" | fromYaml | toYaml | indent 12 }}
             ###EndBlock(testNodeRequires)
       {{- end }}
       - shared/release: &release
@@ -89,7 +94,7 @@ workflows:
                 - release
                 {{- end }}
       # Dryrun release for PRs
-      - shared/release: 
+      - shared/release:
           <<: *release
           dryrun: true
           filters:
