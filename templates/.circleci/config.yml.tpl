@@ -64,19 +64,11 @@ workflows:
           context: *contexts
           steps:
             ###Block(testNodeClientSteps)
-            {{- if empty (file.Block "testNodeClientSteps") }}
-            []
-            {{- else }}
-{{ file.Block "testNodeClientSteps" | fromYaml | toYaml | indent 12 }}
-            {{- end }}
+{{ file.Block "testNodeClientSteps" | default "[]" | fromYaml | toYaml | indent 12 }}
             ###EndBlock(testNodeClientSteps)
           requires:
             ###Block(testNodeRequires)
-            {{- if empty (file.Block "testNodeRequires") }}
-            []
-            {{- else }}
-{{ file.Block "testNodeRequires" | fromYaml | toYaml | indent 12 }}
-            {{- end }}
+{{ file.Block "testNodeRequires" | default "[]" | fromYaml | toYaml | indent 12 }}
             ###EndBlock(testNodeRequires)
       {{- end }}
       - shared/release: &release
