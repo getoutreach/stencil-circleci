@@ -96,6 +96,9 @@ workflows:
       # Dryrun release for PRs
       - shared/release:
           <<: *release
+          {{- if $testNodeClient }}
+          node_client: true
+          {{- end }}
           dryrun: true
           filters:
             branches:
