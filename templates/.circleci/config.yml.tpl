@@ -36,8 +36,8 @@ jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook 
 
   ### Start jobs inserted by other modules
 {{- $jobsHook := (stencil.GetModuleHook "jobs") }}
-{{- if $jobsHook }}
-{{ toYaml $jobsHook | indent 2 }}
+{{- range $jobsHook }}
+{{ toYaml . | indent 2 }}
 {{- end }}
   ### End jobs inserted by other modules
 
@@ -49,8 +49,8 @@ workflows:
 
   ### Start workflows inserted by other modules
 {{- $workflowsHook := (stencil.GetModuleHook "workflows") }}
-{{- if $workflowsHook }}
-{{ toYaml $workflowsHook | indent 2 }}
+{{- range $workflowsHook }}
+{{ toYaml . | indent 2 }}
 {{- end }}
   ### End workflows inserted by other modules
 
@@ -59,6 +59,13 @@ workflows:
       ###Block(circleWorkflowJobs)
 {{ file.Block "circleWorkflowJobs" }}
       ###EndBlock(circleWorkflowJobs)
+      ### Start jobs inserted by other modules
+      {{- /* [][]interface{} */}}
+      {{- $releaseJobs := (stencil.GetModuleHook "workflows.release.jobs") }}
+      {{- range $releaseJobs }}
+{{ toYaml (list .) | indent 6 }}
+      {{- end }}
+      ### End jobs inserted by other modules
       {{- if $testNodeClient }}
       - shared/test_node_client:
           context: *contexts
