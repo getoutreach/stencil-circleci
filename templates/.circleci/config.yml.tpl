@@ -59,6 +59,15 @@ workflows:
       ###Block(circleWorkflowJobs)
 {{ file.Block "circleWorkflowJobs" }}
       ###EndBlock(circleWorkflowJobs)
+      ### Start jobs inserted by other modules
+{{- /* [][]interface{} */ }}
+{{- $releaseJobs := (stencil.GetModuleHook "workflows.release.jobs") }}
+{{- range $releaseJobs }}
+{{- range . }}
+{{ toYaml . | indent 6 }}
+{{- end }}
+{{- end }}
+      ### End jobs inserted by other modules
       {{- if $testNodeClient }}
       - shared/test_node_client:
           context: *contexts
