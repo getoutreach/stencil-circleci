@@ -1,6 +1,7 @@
 # Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
+{{- $isService := stencil.Arg "service" }}
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
@@ -132,6 +133,7 @@ workflows:
             - shared/test
       - shared/e2e:
           context: *contexts
+{{- if $isService }}
       - shared/docker:
           context: *contexts
           filters:
@@ -144,3 +146,4 @@ workflows:
                 {{- end }}
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
+{{- end }}
