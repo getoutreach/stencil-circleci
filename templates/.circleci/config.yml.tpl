@@ -117,6 +117,13 @@ workflows:
       - shared/test:
           context: *contexts
           app_name: {{ .Config.Name }}
+          ### Start parameters inserted by other modules
+          {{- /* [][]interface{} */}}
+          {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
+          {{- range $testParametersHook }}
+          {{ toYaml . }}
+          {{- end }}
+          ### End parameters inserted by other modules
 
       - shared/publish_docs:
           context: *contexts
