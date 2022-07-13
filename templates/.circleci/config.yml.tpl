@@ -124,6 +124,9 @@ workflows:
           {{ toYaml . }}
           {{- end }}
           ### End parameters inserted by other modules
+          ###Block(circleTestExtra)
+{{ file.Block "circleTestExtra" }}
+          ###EndBlock(circleTestExtra)
 
       - shared/publish_docs:
           context: *contexts
