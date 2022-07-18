@@ -142,6 +142,10 @@ workflows:
             - shared/test
       - shared/e2e:
           context: *contexts
+          requires:
+          ###Block(circleE2ERequires)
+{{ file.Block "circleE2ERequires" }}
+          ###EndBlock(circleE2ERequires)
       - shared/docker:
           context: *contexts
           filters:
