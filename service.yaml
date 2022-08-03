@@ -1,6 +1,6 @@
 name: stencil-circleci
 arguments:
-  reportingTeam: fnd-dtss
+  reportingTeam: fnd-dt
   description: Stencil Module for CircleCI
   releaseOptions:
     enablePrereleases: true
