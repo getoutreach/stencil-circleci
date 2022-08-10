@@ -5,8 +5,8 @@ arguments:
   releaseOptions:
     enablePrereleases: true
     allowMajorVersions: true
+    prereleasesBranch: rc
 modules:
   - name: github.com/getoutreach/stencil-template-base
 replacements:
-  # Run ourself... on ourself :D
   github.com/getoutreach/stencil-circleci: ./
