@@ -27,6 +27,20 @@ contexts: &contexts
 {{ $userContexts | toYaml | indent 2 }}
   ###EndBlock(extraContexts)
 
+# Branches used for releasing code, pre-release or not
+release_branches: &release_branches
+  {{- if $prereleases }}
+  # Release branch
+  - release
+  # Pre-releases branch
+  - {{ stencil.Arg "releaseOptions.prereleasesBranch" | default  .Git.DefaultBranch | squote }}
+    {{- if not (stencil.Arg "releaseOptions.prereleasesBranch") }}
+  # Unstable branch, e.g. HEAD development
+  - {{ .Git.DefaultBranch | squote }}
+    {{- end }}
+  {{- else }}
+  - {{ .Git.DefaultBranch | squote }}
+  {{- end }}
 
 jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook "jobs")) }} {} {{ end }}
   ###Block(circleJobs)
@@ -79,6 +93,9 @@ workflows:
       {{- end }}
       - shared/release: &release
           dryrun: false
+          {{- if $testNodeClient }}
+          node_client: true
+          {{- end }}
           context: *contexts
           ###Block(circleReleaseExtra)
 {{ file.Block "circleReleaseExtra" }}
@@ -93,27 +110,15 @@ workflows:
         {{- end }}
           filters:
             branches:
-              only:
-                - master
-                - main
-                {{- if $prereleases }}
-                - release
-                {{- end }}
-      # Dryrun release for PRs
+              only: *release_branches
+
+      # Dryrun release for PRs.
       - shared/release:
           <<: *release
-          {{- if $testNodeClient }}
-          node_client: true
-          {{- end }}
           dryrun: true
           filters:
             branches:
-              ignore:
-                - master
-                - main
-                {{- if $prereleases }}
-                - release
-                {{- end }}
+              ignore: *release_branches
       - shared/test:
           context: *contexts
           app_name: {{ .Config.Name }}
@@ -149,11 +154,6 @@ workflows:
           context: *contexts
           filters:
             branches:
-              ignore:
-                - master
-                - main
-                {{- if $prereleases }}
-                - release
-                {{- end }}
+              ignore: *release_branches
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
