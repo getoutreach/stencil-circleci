@@ -1,6 +1,10 @@
 name: github.com/getoutreach/stencil-circleci
 ###Block(keys)
 arguments:
+  releaseOptions.prereleasesBranch:
+    description: See stencil-base
+    schema:
+      type: string
   releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
     schema:
