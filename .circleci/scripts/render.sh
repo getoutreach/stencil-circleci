@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Renders the current stencil module
+set -e
+
+echo " 🛠️ Stencil Version"
+stencil --version
+
+echo " 🔨 Setting up Environment"
+moduleDir=$(pwd)
+tempDir=$(mktemp -d)
+git init
+git checkout -b main
+git commit --allow-empty -m "initial commit"
+pushd "$tempDir" >/dev/null || exit 1
+cat >service.yaml <<EOF
+name: test
+modules:
+  - name: github.com/getoutreach/stencil-circleci
+replacements:
+  github.com/getoutreach/stencil-circleci: 'file://$moduleDir'
+arguments:
+  releaseOptions:
+    enablePrereleases: true
+    prereleasesBranch: rc
+EOF
+
+echo " 📄 Render Stencil Module"
+stencil --skip-update
+
+echo " ℹ️ Running 'circleci validate'"
+circleci config validate
