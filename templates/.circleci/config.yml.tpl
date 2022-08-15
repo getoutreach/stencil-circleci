@@ -9,7 +9,7 @@ orbs:
 # Extra contexts to expose to all jobs below
 contexts: &contexts
 {{- $userContexts := (file.Block "extraContexts" | fromYaml) }}
-{{- $contexts := (stencil.ApplyTemplate "contexts" | fromYaml | uniq) }}
+{{- $contexts := (stencil.ApplyTemplate "contexts" | fromYaml | default (list) | uniq) }}
 {{- if $contexts }}
   {{- /* If we have user contexts, ensure that we don't duplicate builtin ones */}}
   {{- /* We also have to persist their context in the extra contexts list, so we */}}
