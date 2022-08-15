@@ -29,9 +29,9 @@ jobs:
   ###Block(circleJobs)
   render:
     executor:
-      name: testbed-docker
+      name: shared/testbed-docker
     steps:
-      - setup_environment
+      - shared/setup_environment
       - run:
           name: Install Stencil
           command: ./.circleci/scripts/download-stencil.sh
