@@ -9,5 +9,11 @@ import (
 // Replace this with your own tests.
 func TestRenderAFile(t *testing.T) {
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Run(false)
+	st.Args(map[string]interface{}{
+		"releaseOptions": map[string]interface{}{
+			"enablePrereleases": true,
+			"prereleasesBranch": "rc",
+		},
+	})
+	st.Run(true)
 }

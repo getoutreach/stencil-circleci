@@ -30,11 +30,16 @@ contexts: &contexts
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
   {{- if $prereleases }}
+  {{- $pb := stencil.Arg "releaseOptions.prereleasesBranch" }}
   # Release branch
   - release
   # Pre-releases branch
-  - {{ stencil.Arg "releaseOptions.prereleasesBranch" | default  .Git.DefaultBranch | squote }}
-    {{- if not (stencil.Arg "releaseOptions.prereleasesBranch") }}
+  - {{ $pb | default  .Git.DefaultBranch | squote }}
+    {{- /*
+      If we have a pre-release branch set, but it's not the
+      default branch we need to include the default branch
+      */}}
+    {{- if and $pb (ne $pb .Git.DefaultBranch) }}
   # Unstable branch, e.g. HEAD development
   - {{ .Git.DefaultBranch | squote }}
     {{- end }}
