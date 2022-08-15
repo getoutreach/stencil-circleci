@@ -1,5 +1,5 @@
 version: v1.24.0
-generated: 2022-08-15T18:44:57.633262Z
+generated: 2022-08-15T22:27:56.165348Z
 modules:
     - name: github.com/getoutreach/stencil-base
       url: https://github.com/getoutreach/stencil-base
@@ -9,7 +9,7 @@ modules:
       version: local
     - name: github.com/getoutreach/stencil-template-base
       url: https://github.com/getoutreach/stencil-template-base
-      version: v0.3.3
+      version: v0.4.0
 files:
     - name: .circleci/config.yml
       template: .circleci/config.yml.tpl
@@ -52,13 +52,13 @@ files:
       module: github.com/getoutreach/stencil-base
     - name: _helpers
       template: _helpers.tpl
-      module: github.com/getoutreach/stencil-template-base
-    - name: _helpers
-      template: _helpers.tpl
       module: github.com/getoutreach/stencil-base
     - name: _helpers
       template: _helpers.tpl
       module: github.com/getoutreach/stencil-circleci
+    - name: _helpers
+      template: _helpers.tpl
+      module: github.com/getoutreach/stencil-template-base
     - name: bootstrap.lock
       template: bootstrap.lock.tpl
       module: github.com/getoutreach/stencil-template-base
