@@ -34,7 +34,7 @@ release_branches: &release_branches
   # Release branch
   - release
   # Pre-releases branch
-  - {{ $pb | default  .Git.DefaultBranch | squote }}
+  - {{ default .Git.DefaultBranch $pb | squote }}
     {{- /*
       If we have a pre-release branch set, but it's not the
       default branch we need to include the default branch
