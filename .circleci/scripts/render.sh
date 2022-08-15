@@ -9,6 +9,8 @@ echo " 🔨 Setting up Environment"
 moduleDir=$(pwd)
 tempDir=$(mktemp -d)
 git init
+git config --global user.email "circleci@outreach.io"
+git config --global user.name "CircleCI"
 git checkout -b main || true
 git commit --allow-empty -m "initial commit"
 pushd "$tempDir" >/dev/null || exit 1
