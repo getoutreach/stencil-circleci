@@ -26,9 +26,18 @@ release_branches: &release_branches # Release branch
   - "main"
 
 jobs:
-  {}
   ###Block(circleJobs)
-
+  render:
+    executor:
+      name: shared/testbed-docker
+    steps:
+      - shared/setup_environment
+      - run:
+          name: Install Stencil
+          command: ./.circleci/scripts/download-stencil.sh
+      - run:
+          name: Render Files
+          command: ./.circleci/scripts/render.sh
   ###EndBlock(circleJobs)
 
   ### Start jobs inserted by other modules
@@ -46,7 +55,8 @@ workflows:
   release:
     jobs:
       ###Block(circleWorkflowJobs)
-
+      - render:
+          context: *contexts
       ###EndBlock(circleWorkflowJobs)
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
@@ -58,7 +68,7 @@ workflows:
           ###EndBlock(circleReleaseExtra)
           requires:
             ###Block(circleReleaseRequires)
-
+            - render
             ###EndBlock(circleReleaseRequires)
             - shared/test
           filters:
