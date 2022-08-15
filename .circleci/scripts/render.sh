@@ -9,7 +9,7 @@ echo " 🔨 Setting up Environment"
 moduleDir=$(pwd)
 tempDir=$(mktemp -d)
 git init
-git checkout -b main
+git checkout -b main || true
 git commit --allow-empty -m "initial commit"
 pushd "$tempDir" >/dev/null || exit 1
 cat >service.yaml <<EOF
