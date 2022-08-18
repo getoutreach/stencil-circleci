@@ -38,6 +38,17 @@ jobs:
       - run:
           name: Render Files
           command: ./.circleci/scripts/render.sh
+  check-config:
+    executor:
+      name: shared/testbed-docker
+    steps:
+      - shared/setup_environment
+      - run:
+          name: Install check_config
+          command: ./.circleci/scripts/download-check-config.sh
+      - run:
+          name: Run check_config
+          command: ./.circleci/scripts/check-config.sh
   ###EndBlock(circleJobs)
 
   ### Start jobs inserted by other modules
@@ -69,6 +80,7 @@ workflows:
           requires:
             ###Block(circleReleaseRequires)
             - render
+            - check-config
             ###EndBlock(circleReleaseRequires)
             - shared/test
           filters:
