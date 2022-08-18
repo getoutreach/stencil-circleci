@@ -68,6 +68,8 @@ workflows:
       ###Block(circleWorkflowJobs)
       - render:
           context: *contexts
+      - check-config:
+          context: *contexts
       ###EndBlock(circleWorkflowJobs)
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
