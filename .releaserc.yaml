@@ -16,5 +16,9 @@ plugins:
   - "@semantic-release/github"
 
   ### Block(customReleasePlugins)
-
+  - - "@semantic-release/exec"
+    - prepareCmd: make
+  - - "@outreach/semantic-release-circleci-orb"
+    - orbName: "getoutreach/stencil-circleci"
+      orbPath: "orb.yml"
   ### EndBlock(customReleasePlugins)

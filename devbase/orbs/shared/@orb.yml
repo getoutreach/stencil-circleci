@@ -1,0 +1,6 @@
+version: 2.1
+
+description: CircleCI configuration for use with box applications
+display:
+  home_url: "https://www.github.com/getoutreach/stencil-circleci"
+  source_url: "https://www.github.com/getoutreach/stencil-circleci/tree/main/devbase/orbs"
