@@ -23,9 +23,9 @@ contexts: &contexts
   {{- /* Always generate an array if there are no contexts */}}
   []
 {{- end }}
-  ###Block(extraContexts)
+  ## <<Stencil::Block(extraContexts)>>
 {{ $userContexts | toYaml | indent 2 }}
-  ###EndBlock(extraContexts)
+  ## <</Stencil::Block>>
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
@@ -48,9 +48,9 @@ release_branches: &release_branches
   {{- end }}
 
 jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook "jobs")) }} {} {{ end }}
-  ###Block(circleJobs)
+  ## <<Stencil::Block(circleJobs)>>
 {{ file.Block "circleJobs" }}
-  ###EndBlock(circleJobs)
+  ## <</Stencil::Block>>
 
   ### Start jobs inserted by other modules
 {{- $jobsHook := (stencil.GetModuleHook "jobs") }}
@@ -61,9 +61,9 @@ jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook 
 
 workflows:
   version: 2
-  ###Block(circleWorkflows)
+  ## <<Stencil::Block(circleWorkflows)>>
 {{ file.Block "circleWorkflows" }}
-  ###EndBlock(circleWorkflows)
+  ## <</Stencil::Block>>
 
   ### Start workflows inserted by other modules
 {{- $workflowsHook := (stencil.GetModuleHook "workflows") }}
@@ -74,9 +74,9 @@ workflows:
 
   release:
     jobs:
-      ###Block(circleWorkflowJobs)
+      ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}
-      ###EndBlock(circleWorkflowJobs)
+      ## <</Stencil::Block>>
       ### Start jobs inserted by other modules
       {{- /* [][]interface{} */}}
       {{- $releaseJobs := (stencil.GetModuleHook "workflows.release.jobs") }}
@@ -88,13 +88,13 @@ workflows:
       - shared/test_node_client:
           context: *contexts
           steps:
-            ###Block(testNodeClientSteps)
+            ## <<Stencil::Block(testNodeClientSteps)>>
 {{ file.Block "testNodeClientSteps" | default "[]" | fromYaml | toYaml | indent 12 }}
-            ###EndBlock(testNodeClientSteps)
+            ## <</Stencil::Block>>
           requires:
-            ###Block(testNodeRequires)
+            ## <<Stencil::Block(testNodeRequires)>>
 {{ file.Block "testNodeRequires" | default "[]" | fromYaml | toYaml | indent 12 }}
-            ###EndBlock(testNodeRequires)
+            ## <</Stencil::Block>>
       {{- end }}
       - shared/release: &release
           dryrun: false
@@ -102,13 +102,13 @@ workflows:
           node_client: true
           {{- end }}
           context: *contexts
-          ###Block(circleReleaseExtra)
+          ## <<Stencil::Block(circleReleaseExtra)>>
 {{ file.Block "circleReleaseExtra" }}
-          ###EndBlock(circleReleaseExtra)
+          ## <</Stencil::Block>>
           requires:
-            ###Block(circleReleaseRequires)
+            ## <<Stencil::Block(circleReleaseRequires)>>
 {{ file.Block "circleReleaseRequires" }}
-            ###EndBlock(circleReleaseRequires)
+            ## <</Stencil::Block>>
             - shared/test
         {{- if $testNodeClient }}
             - shared/test_node_client
@@ -134,9 +134,9 @@ workflows:
           {{ toYaml . }}
           {{- end }}
           ### End parameters inserted by other modules
-          ###Block(circleTestExtra)
+          ## <<Stencil::Block(circleTestExtra)>>
 {{ file.Block "circleTestExtra" }}
-          ###EndBlock(circleTestExtra)
+          ## <</Stencil::Block>>
 
       - shared/publish_docs:
           context: *contexts
@@ -152,9 +152,9 @@ workflows:
             - shared/test
       - shared/e2e:
           context: *contexts
-          ###Block(circleE2EExtra)
+          ## <<Stencil::Block(circleE2EExtra)>>
 {{ file.Block "circleE2EExtra" }}
-          ###EndBlock(circleE2EExtra)
+          ## <</Stencil::Block>>
       - shared/docker:
           context: *contexts
           filters:

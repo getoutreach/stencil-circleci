@@ -12,8 +12,8 @@ Please read the [CONTRIBUTING.md](CONTRIBUTING.md) document for guidelines on de
 
 ## High-level Overview
 
-<!--- Block(overview) -->
+<!-- <<Stencil::Block(overview)>> -->
 
 For usage documentation, see the [docs/](docs/) directory.
 
-<!--- EndBlock(overview) -->
+<!-- <</Stencil::Block>> -->
