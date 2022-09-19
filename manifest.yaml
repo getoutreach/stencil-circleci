@@ -1,5 +1,5 @@
 name: github.com/getoutreach/stencil-circleci
-###Block(keys)
+## <<Stencil::Block(keys)>>
 arguments:
   releaseOptions.prereleasesBranch:
     description: See stencil-base
@@ -25,4 +25,4 @@ arguments:
       items:
         type: string
     description: gRPC clients to generate. Used to run tests on gRPC clients.
-###EndBlock(keys)
+## <</Stencil::Block>>

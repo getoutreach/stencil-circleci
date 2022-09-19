@@ -15,10 +15,10 @@ plugins:
   - "@semantic-release/release-notes-generator"
   - "@semantic-release/github"
 
-  ### Block(customReleasePlugins)
+  ## <<Stencil::Block(customReleasePlugins)>>
   - - "@semantic-release/exec"
     - prepareCmd: make
   - - "@outreach/semantic-release-circleci-orb"
     - orbName: "getoutreach/stencil-circleci"
       orbPath: "orb.yml"
-  ### EndBlock(customReleasePlugins)
+  ## <</Stencil::Block>>
