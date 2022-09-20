@@ -8,5 +8,6 @@ arguments:
     prereleasesBranch: rc
 modules:
   - name: github.com/getoutreach/stencil-template-base
+  - name: github.com/getoutreach/stencil-circleci
 replacements:
   github.com/getoutreach/stencil-circleci: ./
