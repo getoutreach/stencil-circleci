@@ -1,6 +1,13 @@
 name: github.com/getoutreach/stencil-circleci
 ## <<Stencil::Block(keys)>>
 arguments:
+  coverage.provider:
+    description: The platform to use for coverage reporting
+    schema:
+      type: string
+      enum:
+        - codecov
+        - coveralls
   releaseOptions.prereleasesBranch:
     description: See stencil-base
     schema:
