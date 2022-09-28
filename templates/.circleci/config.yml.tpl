@@ -145,11 +145,6 @@ workflows:
               ignore: /.*/
             tags:
               only: /v[0-9]+(\.[0-9]+)*(-.*)*/
-      - shared/finalize-coverage:
-          context: *contexts
-          requires:
-            - shared/e2e
-            - shared/test
       - shared/e2e:
           context: *contexts
           ## <<Stencil::Block(circleE2EExtra)>>
