@@ -145,11 +145,14 @@ workflows:
               ignore: /.*/
             tags:
               only: /v[0-9]+(\.[0-9]+)*(-.*)*/
+      {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
           ## <<Stencil::Block(circleE2EExtra)>>
 {{ file.Block "circleE2EExtra" }}
           ## <</Stencil::Block>>
+      {{- end }}
+      {{- if not (stencil.Arg "ciOptions.skipDocker") }}
       - shared/docker:
           context: *contexts
           filters:
@@ -157,3 +160,4 @@ workflows:
               ignore: *release_branches
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
+      {{- end }}
