@@ -15,5 +15,5 @@ func TestRenderAFile(t *testing.T) {
 			"prereleasesBranch": "rc",
 		},
 	})
-	st.Run(true)
+	st.Run(false)
 }
