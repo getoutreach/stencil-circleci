@@ -30,5 +30,5 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 			"skipDocker": true,
 		},
 	})
-	st.Run(true)
+	st.Run(false)
 }
