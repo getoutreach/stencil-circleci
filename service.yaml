@@ -6,6 +6,9 @@ arguments:
     enablePrereleases: true
     allowMajorVersions: true
     prereleasesBranch: rc
+  ciOptions:
+    skipDocker: true
+    skipE2e: true
 modules:
   - name: github.com/getoutreach/stencil-template-base
   - name: github.com/getoutreach/stencil-circleci
