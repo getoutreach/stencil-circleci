@@ -16,6 +16,14 @@ arguments:
     description: Enables pre-releasing via semantic-release
     schema:
       type: boolean
+  ciOptions.skipE2e:
+    description: Disables the e2e CI pipeline
+    schema:
+      type: boolean
+  ciOptions.skipDocker:
+    description: Disables the docker ci pipeline
+    schema:
+      type: boolean
   service:
     description: Is this a service or not
     schema:

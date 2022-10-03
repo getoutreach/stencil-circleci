@@ -15,5 +15,20 @@ func TestRenderAFile(t *testing.T) {
 			"prereleasesBranch": "rc",
 		},
 	})
-	st.Run(false)
+	st.Run(true)
+}
+
+func TestRenderWithSkipE2eAndDocker(t *testing.T) {
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	st.Args(map[string]interface{}{
+		"releaseOptions": map[string]interface{}{
+			"enablePrereleases": true,
+			"prereleasesBranch": "rc",
+		},
+		"ciOptions": map[string]interface{}{
+			"skipE2e":    true,
+			"skipDocker": true,
+		},
+	})
+	st.Run(true)
 }

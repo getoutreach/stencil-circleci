@@ -4,7 +4,7 @@ version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@2.5.0
+  shared: getoutreach/shared@2.5.1
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -145,11 +145,14 @@ workflows:
               ignore: /.*/
             tags:
               only: /v[0-9]+(\.[0-9]+)*(-.*)*/
+      {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
           ## <<Stencil::Block(circleE2EExtra)>>
 {{ file.Block "circleE2EExtra" }}
           ## <</Stencil::Block>>
+      {{- end }}
+      {{- if not (stencil.Arg "ciOptions.skipDocker") }}
       - shared/docker:
           context: *contexts
           filters:
@@ -157,3 +160,4 @@ workflows:
               ignore: *release_branches
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
+      {{- end }}

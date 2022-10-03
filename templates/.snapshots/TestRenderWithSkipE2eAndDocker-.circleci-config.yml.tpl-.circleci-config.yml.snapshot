@@ -1,4 +1,4 @@
-# Please re-run stencil after any changes to this file as invalid
+(*codegen.File)(# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
@@ -7,37 +7,29 @@ orbs:
 # Extra contexts to expose to all jobs below
 contexts: &contexts
   - aws-credentials
+  - ghaccesstoken
+  - docker-registry
   - npm-credentials
   - prismacloud-credentials
   - opslevel-credentials
   - vault-dev
   - confluence
   ## <<Stencil::Block(extraContexts)>>
-  - docker-registry
-  - ghaccesstoken
+  
   ## <</Stencil::Block>>
 
 # Branches used for releasing code, pre-release or not
-release_branches: &release_branches # Release branch
+release_branches: &release_branches
+  # Release branch
   - release
   # Pre-releases branch
-  - "rc"
+  - 'rc'
   # Unstable branch, e.g. HEAD development
-  - "main"
+  - ''
 
-jobs:
+jobs:  {} 
   ## <<Stencil::Block(circleJobs)>>
-  render:
-    executor:
-      name: shared/testbed-docker
-    steps:
-      - shared/setup_environment
-      - run:
-          name: Install Stencil
-          command: ./.circleci/scripts/download-stencil.sh
-      - run:
-          name: Render Files
-          command: ./.circleci/scripts/render.sh
+
   ## <</Stencil::Block>>
 
   ### Start jobs inserted by other modules
@@ -55,8 +47,7 @@ workflows:
   release:
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
-      - render:
-          context: *contexts
+
       ## <</Stencil::Block>>
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
@@ -68,7 +59,7 @@ workflows:
           ## <</Stencil::Block>>
           requires:
             ## <<Stencil::Block(circleReleaseRequires)>>
-            - render
+
             ## <</Stencil::Block>>
             - shared/test
           filters:
@@ -84,7 +75,7 @@ workflows:
               ignore: *release_branches
       - shared/test:
           context: *contexts
-          app_name: stencil-circleci
+          app_name: testing
           ### Start parameters inserted by other modules
           ### End parameters inserted by other modules
           ## <<Stencil::Block(circleTestExtra)>>
@@ -98,3 +89,4 @@ workflows:
               ignore: /.*/
             tags:
               only: /v[0-9]+(\.[0-9]+)*(-.*)*/
+)
