@@ -1,6 +1,7 @@
 (*codegen.File)(# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
+
 orbs:
   shared: getoutreach/shared@dev:first
 
