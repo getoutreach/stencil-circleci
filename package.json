@@ -10,6 +10,8 @@
     "conventional-changelog-conventionalcommits": "^5.0.0",
     "prettier": "^2.7.1",
     "semantic-release": "^19.0.3",
-    "semver": "^7.3.7"
+    "semver": "^7.3.7",
+    "//": "The below line makes circleci orb publish work.",
+    "@outreach/semantic-release-circleci-orb": "^1.1.9"
   }
 }

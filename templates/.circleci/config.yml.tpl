@@ -4,7 +4,13 @@ version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@{{ trimPrefix "v" .Module.Version }}
+  {{- /* Orbs don't use a v prefix */}}
+  {{- $moduleVersion := trimPrefix "v" .Module.Version }}
+  {{- /* If the version string contains -rc. prefix with dev: */}}
+  {{- $orbVersion    := contains "-rc." $moduleVersion | ternary (print "dev:" $moduleVersion) $moduleVersion }}
+  {{- /* If the module version is "local" or "vfs" (used for snapshots) use dev:first */}}
+  {{- $orbVersion    := or (eq .Module.Version "local") (eq .Module.Version "vfs") | ternary "dev:first" $orbVersion }}
+  shared: getoutreach/shared@{{ $orbVersion }}
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
