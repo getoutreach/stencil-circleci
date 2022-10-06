@@ -3,6 +3,7 @@
 version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
+
 orbs:
   {{- /* Orbs don't use a v prefix */}}
   {{- $moduleVersion := trimPrefix "v" .Module.Version }}
