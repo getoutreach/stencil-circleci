@@ -1,0 +1,37 @@
+description: Run E2E tests in a Kubernetes cluster
+parameters:
+  vault_address:
+    description: Vault Instance to use
+    type: string
+    default: ""
+  devenv_pre_release:
+    description: Use devenv release candidate to provision the test cluster.
+    type: boolean
+    default: false
+  resource_class:
+    description: The resource class to use for the e2e tests
+    type: string
+    default: "large"
+  no_output_timeout:
+    description: The timeout that gets applied when CircleCI receives no output during the running of e2e tests.
+    type: string
+    default: 10m
+executor:
+  name: testbed-machine
+environment:
+  VAULT_ADDR: << parameters.vault_address >>
+  DEVENV_PRE_RELEASE: << parameters.devenv_pre_release >>
+resource_class: << parameters.resource_class >>
+steps:
+  - setup_environment:
+      machine: true
+  - with_go_cache
+  - run:
+      name: Run E2E Tests
+      command: KUBECONFIG="$HOME/.outreach/kubeconfig.yaml" make e2e
+      no_output_timeout: << parameters.no_output_timeout >>
+  - run:
+      name: Upload Code Coverage
+      command: ./scripts/shell-wrapper.sh ci/testing/coverage.sh /tmp/coverage.out e2e
+  - save_go_cache # We save at the end because binaries are included with this
+  - upload_test_results # Uploads to CircleCI
