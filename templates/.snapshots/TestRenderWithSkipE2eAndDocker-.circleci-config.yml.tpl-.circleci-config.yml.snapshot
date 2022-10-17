@@ -14,6 +14,7 @@ contexts: &contexts
   - opslevel-credentials
   - vault-dev
   - confluence
+  - circleci-credentials
   ## <<Stencil::Block(extraContexts)>>
   
   ## <</Stencil::Block>>
