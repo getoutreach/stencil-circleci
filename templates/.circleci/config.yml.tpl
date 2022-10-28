@@ -4,7 +4,12 @@ version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@2.5.1
+  shared: getoutreach/shared@dev:cache
+
+parameters:
+  rebuild_cache:
+    type: boolean
+    default: false
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -72,7 +77,50 @@ workflows:
 {{- end }}
   ### End workflows inserted by other modules
 
+  rebuild-cache:
+    triggers:
+      - schedule:
+          # Every day at 00:00 UTC.
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - shared/save_cache:
+          context: *contexts
+          app_name: devbase
+          ### Start parameters from test
+{{ file.Block "circleTestExtra" }}
+          ### End parameters from test
+          ### Start parameters inserted by other modules
+          {{- /* [][]interface{} */}}
+          {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
+          {{- range $testParametersHook }}
+          {{ toYaml . }}
+          {{- end }}
+          ### End parameters inserted by other modules
+
+  manual-rebuild-cache:
+    when: << pipeline.parameters.rebuild_cache >>
+    jobs:
+      - shared/save_cache:
+          context: *contexts
+          app_name: devbase
+          ### Start parameters from test
+{{ file.Block "circleTestExtra" }}
+          ### End parameters from test
+          ### Start parameters inserted by other modules
+          {{- /* [][]interface{} */}}
+          {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
+          {{- range $testParametersHook }}
+          {{ toYaml . }}
+          {{- end }}
+          ### End parameters inserted by other modules
+
   release:
+    when:
+      not: << pipeline.parameters.rebuild_cache >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}
