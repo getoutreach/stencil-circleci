@@ -4,7 +4,12 @@ version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@2.5.1
+  shared: getoutreach/shared@dev:cache
+
+parameters:
+  rebuild_cache:
+    type: boolean
+    default: false
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -26,6 +31,22 @@ contexts: &contexts
   ## <<Stencil::Block(extraContexts)>>
 {{ $userContexts | toYaml | indent 2 }}
   ## <</Stencil::Block>>
+
+# Test configs to pass to test and cache jobs
+test: &test
+  context: *contexts
+  app_name: {{ .Config.Name }}
+  ### Start parameters inserted by other modules
+  {{- /* [][]interface{} */}}
+  {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
+  {{- range $testParametersHook }}
+  {{ toYaml . }}
+  {{- end }}
+  ### End parameters inserted by other modules
+  ## <<Stencil::Block(circleTestExtra)>>
+{{ file.Block "circleTestExtra" }}
+  ## <</Stencil::Block>>
+
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
@@ -72,7 +93,26 @@ workflows:
 {{- end }}
   ### End workflows inserted by other modules
 
+  rebuild-cache:
+    triggers:
+      - schedule:
+          # Every day at 00:00 UTC.
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - shared/save_cache: *test
+
+  manual-rebuild-cache:
+    when: << pipeline.parameters.rebuild_cache >>
+    jobs:
+      - shared/save_cache: *test
+
   release:
+    when:
+      not: << pipeline.parameters.rebuild_cache >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}
@@ -124,20 +164,7 @@ workflows:
           filters:
             branches:
               ignore: *release_branches
-      - shared/test:
-          context: *contexts
-          app_name: {{ .Config.Name }}
-          ### Start parameters inserted by other modules
-          {{- /* [][]interface{} */}}
-          {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
-          {{- range $testParametersHook }}
-          {{ toYaml . }}
-          {{- end }}
-          ### End parameters inserted by other modules
-          ## <<Stencil::Block(circleTestExtra)>>
-{{ file.Block "circleTestExtra" }}
-          ## <</Stencil::Block>>
-
+      - shared/test: *test
       - shared/publish_docs:
           context: *contexts
           filters:
