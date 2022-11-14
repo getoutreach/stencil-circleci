@@ -4,7 +4,7 @@ version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
-  shared: getoutreach/shared@2.5.1
+  shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
