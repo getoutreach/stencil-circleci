@@ -19,6 +19,8 @@ cat >service.yaml <<EOF
 name: test
 modules:
   - name: github.com/getoutreach/stencil-circleci
+  - name: github.com/getoutreach/devbase
+    version: main
 replacements:
   github.com/getoutreach/stencil-circleci: 'file://$moduleDir'
 arguments:
