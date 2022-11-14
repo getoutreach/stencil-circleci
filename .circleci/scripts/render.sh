@@ -27,6 +27,8 @@ arguments:
   releaseOptions:
     enablePrereleases: true
     prereleasesBranch: rc
+  versions:
+    devbase: dev:cache
 EOF
 
 echo " 📄 Render Stencil Module"
