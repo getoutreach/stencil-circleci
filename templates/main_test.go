@@ -15,7 +15,7 @@ func TestRenderAFile(t *testing.T) {
 			"prereleasesBranch": "rc",
 		},
 	})
-	st.Run(true)
+	st.Run(false)
 }
 
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
@@ -25,10 +25,13 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 			"enablePrereleases": true,
 			"prereleasesBranch": "rc",
 		},
+		"versions": map[string]interface{}{
+			"devbase": "my-custom-version",
+		},
 		"ciOptions": map[string]interface{}{
 			"skipE2e":    true,
 			"skipDocker": true,
 		},
 	})
-	st.Run(true)
+	st.Run(false)
 }

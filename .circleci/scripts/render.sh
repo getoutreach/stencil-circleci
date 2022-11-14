@@ -19,12 +19,17 @@ cat >service.yaml <<EOF
 name: test
 modules:
   - name: github.com/getoutreach/stencil-circleci
+  - name: github.com/getoutreach/devbase
+    channel: main
 replacements:
   github.com/getoutreach/stencil-circleci: 'file://$moduleDir'
 arguments:
   releaseOptions:
     enablePrereleases: true
     prereleasesBranch: rc
+  # TODO(jaredallard): Remove post-release of devbase
+  versions:
+    devbase: dev:cache
 EOF
 
 echo " 📄 Render Stencil Module"

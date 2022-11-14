@@ -1,5 +1,24 @@
 {{- file.Skip "Virtual file with functions"}}
 
+# devbase.orb_version returns the version to use for devbase orb
+{{- define "devbase.orb_version" }}
+{{- $version := (.Runtime.Modules.ByName "github.com/getoutreach/devbase").Version }}
+{{- /* If we're on 'main' (the default branch) use the latest orb:  dev:first */}}
+{{- if eq $version "main" }}
+{{- "dev:first" }}
+{{- /* If we don't have a v, assume it's a branch and default to dev:<branch> */}}
+{{- else if not (hasPrefix "v" $version) }}
+{{- printf "dev:%s" $version }}
+{{- /* If we have a v and -rc. assume it's a rc version, use special tag */}}
+{{- /* Example: dev:2.6.1-rc.2 */}}
+{{- else if and (hasPrefix "v" $version) (contains "-rc." $version ) }}
+{{- printf "dev:%s" (trimPrefix "v" $version) }}
+{{- /* Otherwise this is probably a semantic-version, so just assume that */}}
+{{- else }}
+{{- trimPrefix "v" $version }}
+{{- end }}
+{{- end }}
+
 {{- define "contexts" }}
 ### Start contexts inserted by other modules
 {{- $contextsHook := (stencil.GetModuleHook "contexts") }}

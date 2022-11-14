@@ -43,4 +43,8 @@ arguments:
       items:
         type: string
     description: gRPC clients to generate. Used to run tests on gRPC clients.
+  versions.devbase:
+    description: Version of devbase to use for the 'getoutreach/shared' orb.
+    schema:
+      type: string
 ## <</Stencil::Block>>
