@@ -20,7 +20,7 @@ name: test
 modules:
   - name: github.com/getoutreach/stencil-circleci
   - name: github.com/getoutreach/devbase
-    version: main
+    channel: main
 replacements:
   github.com/getoutreach/stencil-circleci: 'file://$moduleDir'
 arguments:
