@@ -4,10 +4,10 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.17
 
-require github.com/getoutreach/stencil v1.28.0
+require github.com/getoutreach/stencil v1.28.1
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.5 // indirect
+	github.com/AlecAivazis/survey/v2 v2.3.6 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
 	github.com/Masterminds/sprig/v3 v3.2.2 // indirect
@@ -20,13 +20,13 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emirpasic/gods v1.12.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/getoutreach/gobox v1.53.0 // indirect
+	github.com/getoutreach/gobox v1.54.0 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.2-0.20210804024030-7ab80d7c013d // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-cmp v0.5.8 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/go-github/v47 v47.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
