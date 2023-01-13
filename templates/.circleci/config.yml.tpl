@@ -28,9 +28,6 @@ contexts: &contexts
   {{- /* Always generate an array if there are no contexts */}}
   []
 {{- end }}
-{{- if (stencil.Arg "notifications.releaseFailureSlackChannel") }}
-  - tray-webhooks
-{{- end }}
   ## <<Stencil::Block(extraContexts)>>
 {{ $userContexts | toYaml | indent 2 }}
   ## <</Stencil::Block>>
