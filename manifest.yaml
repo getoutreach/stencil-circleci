@@ -11,6 +11,10 @@ arguments:
       enum:
         - codecov
         - coveralls
+  notifications.releaseFailureSlackChannel:
+    schema:
+      type: string
+    description: The slack channel ID to notify when a release fails.
   releaseOptions.prereleasesBranch:
     description: See stencil-base
     schema:
