@@ -28,6 +28,9 @@ contexts: &contexts
   {{- /* Always generate an array if there are no contexts */}}
   []
 {{- end }}
+{{- if (stencil.Arg "notifications.releaseFailureSlackChannel") }}
+  - tray-webhooks
+{{- end }}
   ## <<Stencil::Block(extraContexts)>>
 {{ $userContexts | toYaml | indent 2 }}
   ## <</Stencil::Block>>
@@ -142,6 +145,10 @@ workflows:
           node_client: true
           {{- end }}
           context: *contexts
+          {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.releaseFailureSlackChannel" }}
+          {{- if $releaseFailureSlackChannel }}
+          release_failure_slack_channel: {{ $releaseFailureSlackChannel }}
+          {{- end }}
           ## <<Stencil::Block(circleReleaseExtra)>>
 {{ file.Block "circleReleaseExtra" }}
           ## <</Stencil::Block>>
