@@ -4,7 +4,7 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.17
 
-require github.com/getoutreach/stencil v1.29.0-rc.2
+require github.com/getoutreach/stencil v1.29.0
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6 // indirect
