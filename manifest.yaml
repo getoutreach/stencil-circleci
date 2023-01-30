@@ -2,7 +2,7 @@ name: github.com/getoutreach/stencil-circleci
 ## <<Stencil::Block(keys)>>
 modules:
   - name: github.com/getoutreach/devbase
-    version: ">=2.7.0"
+    channel: rc
 arguments:
   coverage.provider:
     description: The platform to use for coverage reporting
