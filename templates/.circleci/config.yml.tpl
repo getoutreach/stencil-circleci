@@ -5,6 +5,7 @@ version: 2.1
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
+  queue: eddiewebb/queue@1.8.4
 
 parameters:
   rebuild_cache:
