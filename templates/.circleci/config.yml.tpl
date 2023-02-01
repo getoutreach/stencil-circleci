@@ -143,9 +143,9 @@ workflows:
           node_client: true
           {{- end }}
           context: *contexts
-          {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.releaseFailureSlackChannel" }}
+          {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
           {{- if $releaseFailureSlackChannel }}
-          release_failure_slack_channel: {{ $releaseFailureSlackChannel }}
+          release_failure_slack_channel: "{{ $releaseFailureSlackChannel }}"
           {{- end }}
           ## <<Stencil::Block(circleReleaseExtra)>>
 {{ file.Block "circleReleaseExtra" }}
