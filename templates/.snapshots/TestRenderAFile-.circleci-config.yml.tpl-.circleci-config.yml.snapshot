@@ -3,6 +3,7 @@
 version: 2.1
 orbs:
   shared: getoutreach/shared@dev:2.9.0-rc.4
+  queue: eddiewebb/queue@1.8.4
 
 parameters:
   rebuild_cache:
