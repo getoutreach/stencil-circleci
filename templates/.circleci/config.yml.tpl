@@ -174,7 +174,8 @@ workflows:
           context: *contexts
           filters:
             branches:
-              - main
+              only:
+                - main
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
