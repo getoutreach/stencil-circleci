@@ -174,9 +174,7 @@ workflows:
           context: *contexts
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
+              - main
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
