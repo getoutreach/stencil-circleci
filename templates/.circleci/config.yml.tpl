@@ -175,7 +175,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - {{ .Git.DefaultBranch }}
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
