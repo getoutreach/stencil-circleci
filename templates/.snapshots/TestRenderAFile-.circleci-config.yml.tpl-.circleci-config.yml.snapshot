@@ -117,7 +117,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - 
       - shared/e2e:
           context: *contexts
           ## <<Stencil::Block(circleE2EExtra)>>
