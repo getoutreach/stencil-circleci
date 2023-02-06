@@ -174,9 +174,8 @@ workflows:
           context: *contexts
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
+              only:
+                - {{ .Git.DefaultBranch }}
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
