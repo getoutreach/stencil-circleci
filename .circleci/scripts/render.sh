@@ -27,9 +27,6 @@ arguments:
   releaseOptions:
     enablePrereleases: true
     prereleasesBranch: rc
-  # TODO(jaredallard): Remove post-release of devbase
-  versions:
-    devbase: dev:cache
 EOF
 
 echo " 📄 Render Stencil Module"
