@@ -53,3 +53,13 @@ grpcClients:
   - node
   - ruby
 ```
+
+
+## `ciOptions.skipDocker`
+
+Disables the docker ci pipeline
+
+```yaml
+ciOptions:
+  skipDocker: true
+```
