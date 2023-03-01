@@ -54,7 +54,6 @@ grpcClients:
   - ruby
 ```
 
-
 ## `ciOptions.skipDocker`
 
 Disables the docker ci pipeline
@@ -62,4 +61,13 @@ Disables the docker ci pipeline
 ```yaml
 ciOptions:
   skipDocker: true
+```
+
+## `ciOptions.skipE2e`
+
+Disables the e2e CI pipeline
+
+```yaml
+ciOptions:
+  skipE2e: true
 ```
