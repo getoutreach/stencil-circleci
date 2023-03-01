@@ -65,7 +65,7 @@ ciOptions:
 
 ## `ciOptions.skipE2e`
 
-Disables the e2e CI pipeline
+Disables the `shared/e2e` step in the CircleCI pipeline from running
 
 ```yaml
 ciOptions:
