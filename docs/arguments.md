@@ -53,3 +53,21 @@ grpcClients:
   - node
   - ruby
 ```
+
+## `ciOptions.skipDocker`
+
+Disables the `shared/docker` step in the CircleCI pipeline from running
+
+```yaml
+ciOptions:
+  skipDocker: true
+```
+
+## `ciOptions.skipE2e`
+
+Disables the `shared/e2e` step in the CircleCI pipeline from running
+
+```yaml
+ciOptions:
+  skipE2e: true
+```
