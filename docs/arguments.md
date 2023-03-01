@@ -56,7 +56,7 @@ grpcClients:
 
 ## `ciOptions.skipDocker`
 
-Disables the docker ci pipeline
+Disables the `shared/docker` step in the CircleCI pipeline from running
 
 ```yaml
 ciOptions:
