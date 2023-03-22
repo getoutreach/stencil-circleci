@@ -9,10 +9,15 @@ arguments:
   ciOptions:
     skipDocker: true
     skipE2e: true
+  opslevel:
+    confluenceSpaceKey: DT
+    tier: 2
+    lifecycle: public_ga
 modules:
   - name: github.com/getoutreach/stencil-template-base
   - name: github.com/getoutreach/stencil-circleci
   - name: github.com/getoutreach/devbase
   - name: github.com/getoutreach/stencil-golang
+  - name: github.com/getoutreach/stencil-outreach
 replacements:
   github.com/getoutreach/stencil-circleci: ./
