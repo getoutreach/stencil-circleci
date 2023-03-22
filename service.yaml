@@ -13,6 +13,8 @@ arguments:
     confluenceSpaceKey: DT
     tier: 2
     lifecycle: public_ga
+  notifications:
+    slackChannel: "#dt-notifications"
 modules:
   - name: github.com/getoutreach/stencil-template-base
   - name: github.com/getoutreach/stencil-circleci
