@@ -26,6 +26,7 @@ service:
     - stencil-circleci
   tags:
     ## <<Stencil::Block(extraTags)>>
+
     ## <</Stencil::Block>>
     - key: repo
       value: "https://github.com/getoutreach/stencil-circleci"
