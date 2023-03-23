@@ -13,6 +13,7 @@ arguments:
     confluenceSpaceKey: DT
     tier: 2
     lifecycle: public_ga
+  lintroller: platinum
   notifications:
     slackChannel: "#dt-notifications"
 modules:
