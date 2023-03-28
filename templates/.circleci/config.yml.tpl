@@ -176,6 +176,8 @@ workflows:
             branches:
               only:
                 - {{ .Git.DefaultBranch }}
+            tags:
+              only: /v\d+(\.\d+)*(-.*)*/
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
