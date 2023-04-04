@@ -44,7 +44,7 @@ release_branches: &release_branches
   # Pre-releases branch
   - 'rc'
   # Unstable branch, e.g. HEAD development
-  - ''
+  - 'main'
 
 jobs:  {} 
   ## <<Stencil::Block(circleJobs)>>
@@ -117,7 +117,7 @@ workflows:
           filters:
             branches:
               only:
-                - 
+                - main
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
       - shared/e2e:
