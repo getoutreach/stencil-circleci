@@ -3,6 +3,7 @@
 version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $testNodeClient := and (has "grpc" (stencil.Arg "serviceActivities")) (has "node" (stencil.Arg "grpcClients")) }}
+{{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
   queue: eddiewebb/queue@1.8.4
@@ -56,17 +57,17 @@ release_branches: &release_branches
   # Release branch
   - release
   # Pre-releases branch
-  - {{ default .Git.DefaultBranch $pb | squote }}
+  - {{ default $defaultBranch $pb | squote }}
     {{- /*
       If we have a pre-release branch set, but it's not the
       default branch we need to include the default branch
       */}}
-    {{- if and $pb (ne $pb .Git.DefaultBranch) }}
+    {{- if and $pb (ne $pb $defaultBranch) }}
   # Unstable branch, e.g. HEAD development
-  - {{ .Git.DefaultBranch | squote }}
+  - {{ $defaultBranch | squote }}
     {{- end }}
   {{- else }}
-  - {{ .Git.DefaultBranch | squote }}
+  - {{ $defaultBranch | squote }}
   {{- end }}
 
 jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook "jobs")) }} {} {{ end }}
@@ -102,7 +103,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - {{ $defaultBranch }}
     jobs:
       - shared/save_cache: *test
 
@@ -175,7 +176,7 @@ workflows:
           filters:
             branches:
               only:
-                - {{ .Git.DefaultBranch }}
+                - {{ $defaultBranch }}
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
