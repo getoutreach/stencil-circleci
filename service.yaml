@@ -20,7 +20,6 @@ modules:
   - name: github.com/getoutreach/stencil-template-base
   - name: github.com/getoutreach/stencil-circleci
   - name: github.com/getoutreach/devbase
-    channel: rc
   - name: github.com/getoutreach/stencil-golang
   - name: github.com/getoutreach/stencil-outreach
 replacements:
