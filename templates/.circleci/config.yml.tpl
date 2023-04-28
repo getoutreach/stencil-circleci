@@ -170,7 +170,11 @@ workflows:
           filters:
             branches:
               ignore: *release_branches
-      - shared/test: *test
+      - shared/test:
+          <<: *test
+          ## <<Stencil::Block(circleSharedTestExtra)>>
+{{ file.Block "circleSharedTestExtra" }}
+          ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
           filters:
