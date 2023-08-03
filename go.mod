@@ -4,7 +4,7 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.19
 
-require github.com/getoutreach/stencil v1.35.0
+require github.com/getoutreach/stencil v1.36.0
 
 require (
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
@@ -27,7 +27,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/getoutreach/gobox v1.70.5 // indirect
+	github.com/getoutreach/gobox v1.71.0 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.4.1 // indirect
 	github.com/go-git/go-git/v5 v5.6.1 // indirect

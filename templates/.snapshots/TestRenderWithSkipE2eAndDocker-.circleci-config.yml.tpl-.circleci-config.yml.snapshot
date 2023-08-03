@@ -17,7 +17,6 @@ contexts: &contexts
   - docker-registry
   - npm-credentials
   - prismacloud-credentials
-  - opslevel-credentials
   - vault-dev
   - confluence
   - circleci-credentials
