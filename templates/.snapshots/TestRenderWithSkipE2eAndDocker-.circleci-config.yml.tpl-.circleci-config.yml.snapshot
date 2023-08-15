@@ -16,7 +16,6 @@ contexts: &contexts
   - ghaccesstoken
   - docker-registry
   - npm-credentials
-  - prismacloud-credentials
   - vault-dev
   - confluence
   - circleci-credentials
