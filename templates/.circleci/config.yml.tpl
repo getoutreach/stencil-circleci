@@ -6,7 +6,7 @@ version: 2.1
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
-  queue: eddiewebb/queue@1.8.4
+  queue: eddiewebb/queue@2.2.1
 
 parameters:
   rebuild_cache:
