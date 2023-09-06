@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/getoutreach/stencil/pkg/configuration"
 	"github.com/getoutreach/stencil/pkg/stenciltest"
 )
 
@@ -14,6 +15,11 @@ func TestRenderAFile(t *testing.T) {
 			"enablePrereleases": true,
 			"prereleasesBranch": "rc",
 		},
+	})
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Channel: "main",
+		Version: "main",
 	})
 	st.Run(true)
 }
