@@ -3,8 +3,8 @@
 # devbase.orb_version returns the version to use for devbase orb
 {{- define "devbase.orb_version" }}
 {{- $version := (.Runtime.Modules.ByName "github.com/getoutreach/devbase").Version }}
-{{- /* If we're on 'main' (the default branch) use the latest orb:  dev:first */}}
-{{- if eq $version "main" }}
+{{- /* If we're on 'main' (the default branch) or use local version of devbase, use the latest orb:  dev:first */}}
+{{- if or (eq $version "main") (eq $version "local")}}
 {{- "dev:first" }}
 {{- /* If we don't have a v, assume it's a branch and default to dev:<branch> */}}
 {{- else if not (hasPrefix "v" $version) }}
