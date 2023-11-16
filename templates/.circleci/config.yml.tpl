@@ -191,7 +191,24 @@ workflows:
           ## <</Stencil::Block>>
       {{- end }}
       {{- if not (stencil.Arg "ciOptions.skipDocker") }}
-      - shared/docker:
+      - shared/docker_stitch:
+          context: *contexts
+          requires:
+            - shared/docker_amd64
+            - shared/docker_arm64
+          filters:
+            branches:
+              ignore: *release_branches
+            tags:
+              only: /v\d+(\.\d+)*(-.*)*/
+      - shared/docker_amd64:
+          context: *contexts
+          filters:
+            branches:
+              ignore: *release_branches
+            tags:
+              only: /v\d+(\.\d+)*(-.*)*/
+      - shared/docker_arm64:
           context: *contexts
           filters:
             branches:
