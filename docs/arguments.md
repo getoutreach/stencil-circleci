@@ -71,3 +71,11 @@ Disables the `shared/e2e` step in the CircleCI pipeline from running
 ciOptions:
   skipE2e: true
 ```
+
+## `ciOptions.skipE2eOnMain`
+Disables the `shared/e2e` step in the CircleCI pipeline running on the `main` branch
+
+```yaml
+ciOptions:
+  skipE2eOnMain: true
+```

@@ -186,6 +186,11 @@ workflows:
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
+          {{- if stencil.Arg "ciOptions.skipE2eOnMain" }}
+          filters:
+            branches:
+              ignore: *release_branches
+          {{- end }}
           ## <<Stencil::Block(circleE2EExtra)>>
 {{ file.Block "circleE2EExtra" }}
           ## <</Stencil::Block>>

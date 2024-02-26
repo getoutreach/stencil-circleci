@@ -2,7 +2,7 @@
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@2.25.0
+  shared: getoutreach/shared@my-custom-version
   queue: eddiewebb/queue@2.2.1
 
 parameters:
@@ -124,6 +124,9 @@ workflows:
               only: /v\d+(\.\d+)*(-.*)*/
       - shared/e2e:
           context: *contexts
+          filters:
+            branches:
+              ignore: *release_branches
           ## <<Stencil::Block(circleE2EExtra)>>
 
           ## <</Stencil::Block>>

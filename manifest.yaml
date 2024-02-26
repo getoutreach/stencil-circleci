@@ -27,6 +27,10 @@ arguments:
     description: Disables the e2e CI pipeline
     schema:
       type: boolean
+  ciOptions.skipE2eOnMain:
+    description: Disables the e2e CI pipeline on main branch
+    schema:
+      type: boolean
   ciOptions.skipDocker:
     description: Disables the docker ci pipeline
     schema:
