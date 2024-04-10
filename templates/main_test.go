@@ -15,7 +15,7 @@ func TestRenderAFile(t *testing.T) {
 			"prereleasesBranch": "rc",
 		},
 	})
-	st.Run(true)
+	st.Run(stenciltest.RegenerateSnapshots())
 }
 
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
@@ -33,5 +33,5 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 			"skipDocker": true,
 		},
 	})
-	st.Run(true)
+	st.Run(stenciltest.RegenerateSnapshots())
 }
