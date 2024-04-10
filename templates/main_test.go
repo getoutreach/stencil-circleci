@@ -18,6 +18,17 @@ func TestRenderAFile(t *testing.T) {
 	st.Run(stenciltest.RegenerateSnapshots())
 }
 
+func TestConfigForLibraryWithNodeJSGRPCClient(t *testing.T) {
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	st.Args(map[string]interface{}{
+		"grpcClients": []interface{}{
+			"node",
+		},
+		"service": false,
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
