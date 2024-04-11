@@ -25,6 +25,9 @@ func TestConfigForLibraryWithNodeJSGRPCClient(t *testing.T) {
 			"node",
 		},
 		"service": false,
+		"versions": map[string]interface{}{
+			"devbase": "my-custom-version",
+		},
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
