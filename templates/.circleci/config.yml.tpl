@@ -75,6 +75,25 @@ jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook 
 {{ file.Block "circleJobs" }}
   ## <</Stencil::Block>>
 
+  {{- if not (stencil.Arg "ciOptions.skipDocker") }}
+  wiz_cli_image_scan:
+    executor:
+      name: shared/testbed-machine
+    steps:
+      - shared/setup_environment
+      - checkout
+      - shared/build_docker_image
+      - run:
+          name: Download Wiz CLI
+          command: curl -o wizcli https://wizcli.app.wiz.io/latest/wizcli && chmod +x wizcli
+      - run:
+          name: Authenticate to Wiz
+          command: ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
+      - run:
+          name: Run wiz-cli docker image scan
+          command: ./wizcli docker scan --image ./docker-images/{{.Config.Name}}-x86_64.tar --policy "Default vulnerabilities policy" --policy-hits-only
+  {{- end }}
+
   ### Start jobs inserted by other modules
 {{- $jobsHook := (stencil.GetModuleHook "jobs") }}
 {{- range $jobsHook }}
@@ -119,6 +138,10 @@ workflows:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}
       ## <</Stencil::Block>>
+      {{- if not (stencil.Arg "ciOptions.skipDocker") }}
+      - wiz_cli_image_scan:
+          context: *contexts
+      {{- end }}
       ### Start jobs inserted by other modules
       {{- /* [][]interface{} */}}
       {{- $releaseJobs := (stencil.GetModuleHook "workflows.release.jobs") }}

@@ -49,6 +49,22 @@ jobs:  {}
   ## <<Stencil::Block(circleJobs)>>
 
   ## <</Stencil::Block>>
+  wiz_cli_image_scan:
+    executor:
+      name: shared/testbed-machine
+    steps:
+      - shared/setup_environment
+      - checkout
+      - shared/build_docker_image
+      - run:
+          name: Download Wiz CLI
+          command: curl -o wizcli https://wizcli.app.wiz.io/latest/wizcli && chmod +x wizcli
+      - run:
+          name: Authenticate to Wiz
+          command: ./wizcli auth --id "$WIZ_CLIENT_ID" --secret "$WIZ_CLIENT_SECRET"
+      - run:
+          name: Run wiz-cli docker image scan
+          command: ./wizcli docker scan --image ./docker-images/testing-x86_64.tar --policy "Default vulnerabilities policy" --policy-hits-only
 
   ### Start jobs inserted by other modules
   ### End jobs inserted by other modules
@@ -86,6 +102,8 @@ workflows:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 
       ## <</Stencil::Block>>
+      - wiz_cli_image_scan:
+          context: *contexts
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
       - shared/release: &release
