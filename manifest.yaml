@@ -37,6 +37,14 @@ arguments:
     description: See stencil-base
     schema:
       type: string
+  releaseOptions.orbName:
+    description: The name of the orb to publish, if releaseOptions.publishOrb is true.
+    schema:
+      type: string
+  releaseOptions.publishOrb:
+    description: Publishes the orb defined in the repository to the CircleCI orb registry.
+    schema:
+      type: boolean
   service:
     description: Is this a service or not
     schema:
