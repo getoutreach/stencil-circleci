@@ -4,6 +4,14 @@ modules:
   - name: github.com/getoutreach/devbase
     version: ">=2.22.0"
 arguments:
+  ciOptions.skipDocker:
+    description: Disables the docker ci pipeline
+    schema:
+      type: boolean
+  ciOptions.skipE2e:
+    description: Disables the e2e CI pipeline
+    schema:
+      type: boolean
   coverage.provider:
     description: The platform to use for coverage reporting
     schema:
@@ -11,24 +19,30 @@ arguments:
       enum:
         - codecov
         - coveralls
+  grpcClients:
+    schema:
+      type: array
+      items:
+        type: string
+    description: gRPC clients to generate. Used to run tests on gRPC clients.
   notifications.slackChannel:
     schema:
       type: string
     description: The slack channel notify for build and release failures.
-  releaseOptions.prereleasesBranch:
-    description: See stencil-base
-    schema:
-      type: string
   releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
     schema:
       type: boolean
-  ciOptions.skipE2e:
-    description: Disables the e2e CI pipeline
+  releaseOptions.prereleasesBranch:
+    description: See stencil-base
     schema:
-      type: boolean
-  ciOptions.skipDocker:
-    description: Disables the docker ci pipeline
+      type: string
+  releaseOptions.orbName:
+    description: The name of the orb to publish, if releaseOptions.publishOrb is true.
+    schema:
+      type: string
+  releaseOptions.publishOrb:
+    description: Publishes the orb defined in the repository to the CircleCI orb registry.
     schema:
       type: boolean
   service:
@@ -41,12 +55,6 @@ arguments:
       type: array
       items:
         type: string
-  grpcClients:
-    schema:
-      type: array
-      items:
-        type: string
-    description: gRPC clients to generate. Used to run tests on gRPC clients.
   versions.devbase:
     description: Version of devbase to use for the 'getoutreach/shared' orb.
     schema:
