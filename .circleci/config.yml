@@ -107,7 +107,9 @@ workflows:
 
   release:
     when:
-      not: << pipeline.parameters.rebuild_cache >>
+      and:
+        - not: << pipeline.parameters.rebuild_cache >>
+        - not: << pipeline.parameters.release_rc >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
       - render:
@@ -130,7 +132,7 @@ workflows:
             - shared/test
           filters:
             branches:
-              only: *release_branches
+              only: release
       - shared/pre-release: &pre-release
           dryrun: false
           context: *contexts
@@ -162,13 +164,13 @@ workflows:
           filters:
             branches:
               ignore: *release_branches
-      # # stable release for release branch
-      # - shared/release:
-      #     context: *contexts
-      #     dryrun: false
-      #     filters:
-      #       branches:
-      #         only: release
+      # stable release for release branch
+      - shared/release:
+          context: *contexts
+          dryrun: false
+          filters:
+            branches:
+              only: release
       - shared/test:
           <<: *test
           ## <<Stencil::Block(circleSharedTestExtra)>>
