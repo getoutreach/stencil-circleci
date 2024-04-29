@@ -43,10 +43,6 @@ arguments:
     description: The time of auto prerelease job will be run (UTC timezone).
     schema:
       type: string
-  ciOptions.skipE2e:
-    description: Disables the e2e CI pipeline
-    schema:
-      type: string
   releaseOptions.orbName:
     description: The name of the orb to publish, if releaseOptions.publishOrb is true.
     schema:
