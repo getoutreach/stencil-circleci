@@ -127,6 +127,8 @@ workflows:
         {{- if not ( empty (stencil.Arg "releaseOptions.prereleasesCron" )) }}
         {{- $cronTime = stencil.Arg "releaseOptions.prereleasesCron" }}
         {{- end }}
+          # Set the cron time in service manifest with releaseOptions.prereleasesCron
+          # The deault time is 12pm every Tuesday(PST)
           cron: {{ $cronTime }}
           filters:
             branches:

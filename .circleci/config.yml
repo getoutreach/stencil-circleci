@@ -90,6 +90,8 @@ workflows:
   auto-release-rc:
     triggers:
       - schedule:
+          # Set the cronjob time in service manifest releaseOptions.prereleasesCron
+          # The deault time for this cronjob is at noon every Tuesday(PST)
           cron: 0 19 * * 2
           filters:
             branches:
