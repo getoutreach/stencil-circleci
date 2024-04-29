@@ -9,6 +9,9 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
+  release_rc:
+    type: boolean
+    default: false
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -38,8 +41,6 @@ test: &test
 release_branches: &release_branches # Release branch
   - release
   # Pre-releases branch
-  - "rc"
-  # Unstable branch, e.g. HEAD development
   - "main"
 
 jobs:
@@ -86,6 +87,24 @@ workflows:
     jobs:
       - shared/save_cache: *test
 
+  auto-release-rc:
+    triggers:
+      - schedule:
+          cron: 0 19 * * 2
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - shared/trigger_rc_release:
+          context: *contexts
+
+  manual-release-rc:
+    when: << pipeline.parameters.release_rc>>
+    jobs:
+      - shared/trigger_rc_release:
+          context: *contexts
+
   release:
     when:
       not: << pipeline.parameters.rebuild_cache >>
@@ -106,19 +125,50 @@ workflows:
           requires:
             ## <<Stencil::Block(circleReleaseRequires)>>
             - render
+
             ## <</Stencil::Block>>
             - shared/test
           filters:
             branches:
               only: *release_branches
+      - shared/pre-release: &pre-release
+          dryrun: false
+          context: *contexts
+          release_failure_slack_channel: #dt-notifications
+          ## <<Stencil::Block(circleReleaseExtra)>>
 
-      # Dryrun release for PRs.
-      - shared/release:
-          <<: *release
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
+          filters:
+            branches:
+              only:
+                - main
+      # Dryrun for PRs
+      - shared/pre-release: &pre-release
           dryrun: true
+          context: *contexts
+          ## <<Stencil::Block(circleReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
           filters:
             branches:
               ignore: *release_branches
+      # # stable release for release branch
+      # - shared/release:
+      #     context: *contexts
+      #     dryrun: false
+      #     filters:
+      #       branches:
+      #         only: release
       - shared/test:
           <<: *test
           ## <<Stencil::Block(circleSharedTestExtra)>>

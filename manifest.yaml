@@ -35,6 +35,16 @@ arguments:
       type: boolean
   releaseOptions.prereleasesBranch:
     description: See stencil-base
+  releaseOptions.autoPrereleases:
+    description: Auto pre-releasing via CircleCI scheduled workflow
+    schema:
+      type: boolean
+  releaseOptions.prereleasesCron:
+    description: The time of auto prerelease job will be run (UTC timezone).
+    schema:
+      type: string
+  ciOptions.skipE2e:
+    description: Disables the e2e CI pipeline
     schema:
       type: string
   releaseOptions.orbName:

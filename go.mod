@@ -4,7 +4,10 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.19
 
-require github.com/getoutreach/stencil v1.38.0
+require (
+	github.com/getoutreach/stencil v1.38.0
+	gopkg.in/yaml.v2 v2.4.0
+)
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
@@ -31,7 +34,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.16.0 // indirect
-	github.com/getoutreach/gobox v1.89.0 // indirect
+	github.com/getoutreach/gobox v1.89.0
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.5.0 // indirect
 	github.com/go-git/go-git/v5 v5.11.0 // indirect
@@ -65,7 +68,7 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/sirupsen/logrus v1.9.3
 	github.com/skeema/knownhosts v1.2.1 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/ulikunitz/xz v0.5.11 // indirect

@@ -2,6 +2,7 @@
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
+{{- $prereleaseBranch := stencil.Arg "releaseOptions.prereleasesBranch" }}
 {{- $testNodeClient := and (or (not (stencil.Arg "service")) (has "grpc" (stencil.Arg "serviceActivities"))) (has "node" (stencil.Arg "grpcClients")) }}
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 orbs:
@@ -12,6 +13,12 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
+  {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
+  release_rc:
+    type: boolean
+    default: false
+  {{- end }}
+
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -111,10 +118,37 @@ workflows:
     when: << pipeline.parameters.rebuild_cache >>
     jobs:
       - shared/save_cache: *test
+  {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
+
+  auto-release-rc:
+    triggers:
+      - schedule:
+          cron: {{ stencil.Arg "releaseOptions.prereleasesCron" }}
+          filters:
+            branches:
+              only:
+                - {{ $prereleaseBranch }}
+    jobs:
+      - shared/trigger_rc_release:
+          context: *contexts
+  {{- end }}
+
+  {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
+
+  manual-release-rc:
+    when: << pipeline.parameters.release_rc>>
+    jobs:
+      - shared/trigger_rc_release:
+          context: *contexts
+  {{- end }}
 
   release:
     when:
-      not: << pipeline.parameters.rebuild_cache >>
+      and:
+        - not: << pipeline.parameters.rebuild_cache >>
+        {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
+        - not: << pipeline.parameters.release_rc >>
+        {{- end }}
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}
@@ -161,15 +195,48 @@ workflows:
         {{- end }}
           filters:
             branches:
-              only: *release_branches
+              only: release
 
-      # Dryrun release for PRs.
-      - shared/release:
-          <<: *release
+      {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
+      - shared/pre-release: &pre-release
+          dryrun: false
+          context: *contexts
+          release_failure_slack_channel: {{ $releaseFailureSlackChannel }}
+          ## <<Stencil::Block(circleReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
+          filters:
+            branches:
+              only:
+                - {{ $prereleaseBranch }}
+      {{- end }}
+      # Dryrun for PRs
+      - shared/pre-release: &pre-release
           dryrun: true
+          context: *contexts
+          ## <<Stencil::Block(circleReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
           filters:
             branches:
               ignore: *release_branches
+      # stable release for release branch
+      - shared/release:
+          context: *contexts
+          dryrun: false
+          filters:
+            branches:
+              only: release
       - shared/test:
           <<: *test
           ## <<Stencil::Block(circleSharedTestExtra)>>

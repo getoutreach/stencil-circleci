@@ -5,7 +5,9 @@ arguments:
   releaseOptions:
     enablePrereleases: true
     allowMajorVersions: true
-    prereleasesBranch: rc
+    autoPrereleases: true
+    prereleasesCron: "0 19 * * 2"
+    prereleasesBranch: main
   ciOptions:
     skipDocker: true
     skipE2e: true
