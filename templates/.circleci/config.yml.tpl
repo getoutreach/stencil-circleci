@@ -123,7 +123,11 @@ workflows:
   auto-release-rc:
     triggers:
       - schedule:
-          cron: {{ stencil.Arg "releaseOptions.prereleasesCron" }}
+        {{- $cronTime := "0 19 * * 2"}}
+        {{- if not ( empty (stencil.Arg "releaseOptions.prereleasesCron" )) }}
+        {{- $cronTime = stencil.Arg "releaseOptions.prereleasesCron" }}
+        {{- end }}
+          cron: {{ $cronTime }}
           filters:
             branches:
               only:
