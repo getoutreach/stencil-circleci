@@ -13,7 +13,7 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
-  {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
+  {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
   release_rc:
     type: boolean
     default: false
