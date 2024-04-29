@@ -59,8 +59,10 @@ test: &test
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
+  {{- $stableBranch := "main" }}
   {{- if $prereleases }}
   {{- $pb := stencil.Arg "releaseOptions.prereleasesBranch" }}
+  {{- $stableBranch = "release" }}
   # Release branch
   - release
   # Pre-releases branch
@@ -201,7 +203,7 @@ workflows:
         {{- end }}
           filters:
             branches:
-              only: release
+              only: {{ $stableBranch }}
 
       {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
       - shared/pre-release: &pre-release
