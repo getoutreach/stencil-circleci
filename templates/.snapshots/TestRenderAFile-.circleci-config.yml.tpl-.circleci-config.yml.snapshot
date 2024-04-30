@@ -45,8 +45,6 @@ release_branches: &release_branches
   # Release branch
   - release
   # Pre-releases branch
-  - 'rc'
-  # Unstable branch, e.g. HEAD development
   - 'main'
 
 jobs:  {} 

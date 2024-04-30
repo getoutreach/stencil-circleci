@@ -110,7 +110,7 @@ workflows:
             - shared/test_node_client
           filters:
             branches:
-              only: release
+              only: main
       # Dryrun for PRs
       - shared/pre-release: &pre-release
           dryrun: true
