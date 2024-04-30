@@ -12,7 +12,19 @@ func TestRenderAFile(t *testing.T) {
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
 			"enablePrereleases": true,
-			"prereleasesBranch": "rc",
+			"prereleasesBranch": "main",
+		},
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
+func TestConfigForAutoPrerelease(t *testing.T) {
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	st.Args(map[string]interface{}{
+		"releaseOptions": map[string]interface{}{
+			"enablePrereleases": true,
+			"prereleasesBranch": "main",
+			"autoPrereleases":   true,
 		},
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
@@ -37,7 +49,7 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
 			"enablePrereleases": true,
-			"prereleasesBranch": "rc",
+			"prereleasesBranch": "main",
 		},
 		"versions": map[string]interface{}{
 			"devbase": "my-custom-version",

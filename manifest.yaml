@@ -35,6 +35,12 @@ arguments:
       type: boolean
   releaseOptions.prereleasesBranch:
     description: See stencil-base
+  releaseOptions.autoPrereleases:
+    description: Whether to automate creating pre-releases via CircleCI.
+    schema:
+      type: boolean
+  releaseOptions.prereleasesCron:
+    description: When the auto-prerelease job will be run, using cron syntax, in UTC.
     schema:
       type: string
   releaseOptions.orbName:

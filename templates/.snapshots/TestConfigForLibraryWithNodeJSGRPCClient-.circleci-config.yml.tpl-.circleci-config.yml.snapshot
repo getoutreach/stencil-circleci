@@ -10,6 +10,7 @@ parameters:
     type: boolean
     default: false
 
+
 # Extra contexts to expose to all jobs below
 contexts: &contexts
   - aws-credentials
@@ -76,7 +77,8 @@ workflows:
 
   release:
     when:
-      not: << pipeline.parameters.rebuild_cache >>
+      and:
+        - not: << pipeline.parameters.rebuild_cache >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 
@@ -108,15 +110,29 @@ workflows:
             - shared/test_node_client
           filters:
             branches:
-              only: *release_branches
-
-      # Dryrun release for PRs.
-      - shared/release:
-          <<: *release
+              only: main
+      # Dryrun for PRs
+      - shared/pre-release: &pre-release
           dryrun: true
+          context: *contexts
+          ## <<Stencil::Block(circleReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
           filters:
             branches:
               ignore: *release_branches
+      # stable release for release branch
+      - shared/release:
+          context: *contexts
+          dryrun: false
+          filters:
+            branches:
+              only: release
       - shared/test:
           <<: *test
           ## <<Stencil::Block(circleSharedTestExtra)>>

@@ -9,6 +9,10 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
+  release_rc:
+    type: boolean
+    default: false
+
 
 # Extra contexts to expose to all jobs below
 contexts: &contexts
@@ -41,8 +45,6 @@ release_branches: &release_branches
   # Release branch
   - release
   # Pre-releases branch
-  - 'rc'
-  # Unstable branch, e.g. HEAD development
   - 'main'
 
 jobs:  {} 
@@ -79,9 +81,17 @@ workflows:
     jobs:
       - shared/save_cache: *test
 
+  manual-release-rc:
+    when: << pipeline.parameters.release_rc>>
+    jobs:
+      - shared/trigger_rc_release:
+          context: *contexts
+
   release:
     when:
-      not: << pipeline.parameters.rebuild_cache >>
+      and:
+        - not: << pipeline.parameters.rebuild_cache >>
+        - not: << pipeline.parameters.release_rc >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 
@@ -101,15 +111,29 @@ workflows:
             - shared/test
           filters:
             branches:
-              only: *release_branches
-
-      # Dryrun release for PRs.
-      - shared/release:
-          <<: *release
+              only: release
+      # Dryrun for PRs
+      - shared/pre-release: &pre-release
           dryrun: true
+          context: *contexts
+          ## <<Stencil::Block(circleReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
           filters:
             branches:
               ignore: *release_branches
+      # stable release for release branch
+      - shared/release:
+          context: *contexts
+          dryrun: false
+          filters:
+            branches:
+              only: release
       - shared/test:
           <<: *test
           ## <<Stencil::Block(circleSharedTestExtra)>>
