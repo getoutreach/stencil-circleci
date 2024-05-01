@@ -2,7 +2,7 @@
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@dev:2.27.0-rc.1
+  shared: getoutreach/shared@dev:2.27.0-rc.2
   queue: eddiewebb/queue@2.2.1
 
 parameters:
@@ -90,8 +90,6 @@ workflows:
   auto-release-rc:
     triggers:
       - schedule:
-          # Set the cron time in service manifest with releaseOptions.prereleasesCron
-          # The deault time is 12pm every Tuesday(PST)
           cron: 0 19 * * 2
           filters:
             branches:
