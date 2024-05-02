@@ -2,7 +2,7 @@ name: github.com/getoutreach/stencil-circleci
 ## <<Stencil::Block(keys)>>
 modules:
   - name: github.com/getoutreach/devbase
-    version: ">=2.22.0"
+    version: ">=v2.27.0-rc.2"
 arguments:
   ciOptions.skipDocker:
     description: Disables the docker ci pipeline
