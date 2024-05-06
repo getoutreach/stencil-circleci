@@ -14,7 +14,7 @@ validate-orb: build-orb
 
 .PHONY: publish-orb
 publish-orb: validate-orb
-	circleci orb publish orb.yml getoutreach/shared@dev:$(ORB_DEV_TAG)
+	circleci orb publish orb.yml {{ stencil.Arg "releaseOptions.orbName" }}@dev:$(ORB_DEV_TAG)
 {{- end }}
 
 {{- if stencil.Arg "releaseOptions.publishOrb" }}
