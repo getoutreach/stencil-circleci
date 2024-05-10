@@ -1,28 +1,38 @@
 name: stencil-circleci
 arguments:
-  reportingTeam: fnd-dt
-  description: Stencil Module for CircleCI
-  releaseOptions:
-    enablePrereleases: true
-    allowMajorVersions: true
-    autoPrereleases: true
-    prereleasesBranch: main
   ciOptions:
     skipDocker: true
     skipE2e: true
-  opslevel:
-    confluenceSpaceKey: DT
-    tier: 2
-    lifecycle: public_ga
+  description: Stencil Module for CircleCI
   lintroller: platinum
   notifications:
     slackChannel: "#dt-notifications"
+  opslevel:
+    confluenceSpaceKey: DT
+    lifecycle: public_ga
+    tier: 2
+  releaseOptions:
+    allowMajorVersions: true
+    autoPrereleases: true
+    enablePrereleases: true
+    prereleasesBranch: main
+  reportingTeam: fnd-dt
 modules:
   - name: github.com/getoutreach/stencil-template-base
+    channel: rc
   - name: github.com/getoutreach/stencil-circleci
+    channel: rc
   - name: github.com/getoutreach/devbase
     channel: rc
   - name: github.com/getoutreach/stencil-golang
+    channel: rc
   - name: github.com/getoutreach/stencil-outreach
+    channel: rc
+  - name: github.com/getoutreach/stencil-base
+    channel: rc
+  - name: github.com/getoutreach/stencil-discovery
+    channel: rc
+  - name: github.com/getoutreach/stencil-pipeline
+    channel: rc
 replacements:
   github.com/getoutreach/stencil-circleci: ./
