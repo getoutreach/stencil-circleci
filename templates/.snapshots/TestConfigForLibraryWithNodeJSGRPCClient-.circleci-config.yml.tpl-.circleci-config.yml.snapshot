@@ -115,11 +115,11 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: true
           context: *contexts
-          ## <<Stencil::Block(circleReleaseExtra)>>
+          ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 
           ## <</Stencil::Block>>
           requires:
-            ## <<Stencil::Block(circleReleaseRequires)>>
+            ## <<Stencil::Block(circlePreReleaseDryRunRequires)>>
 
             ## <</Stencil::Block>>
             - shared/test

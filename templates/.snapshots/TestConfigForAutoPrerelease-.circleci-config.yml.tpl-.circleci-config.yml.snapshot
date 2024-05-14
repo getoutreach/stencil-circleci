@@ -128,11 +128,11 @@ workflows:
           dryrun: false
           context: *contexts
           release_failure_slack_channel: 
-          ## <<Stencil::Block(circleReleaseExtra)>>
+          ## <<Stencil::Block(circlePreReleaseExtra)>>
 
           ## <</Stencil::Block>>
           requires:
-            ## <<Stencil::Block(circleReleaseRequires)>>
+            ## <<Stencil::Block(circlePreReleaseRequires)>>
 
             ## <</Stencil::Block>>
             - shared/test
@@ -144,11 +144,11 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: true
           context: *contexts
-          ## <<Stencil::Block(circleReleaseExtra)>>
+          ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 
           ## <</Stencil::Block>>
           requires:
-            ## <<Stencil::Block(circleReleaseRequires)>>
+            ## <<Stencil::Block(circlePreReleaseDryRunRequires)>>
 
             ## <</Stencil::Block>>
             - shared/test
