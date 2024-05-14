@@ -18,6 +18,9 @@ parameters:
     type: boolean
     default: false
   {{- end }}
+  ## <<Stencil::Block(CircleCIExtraParams)>>
+{{ file.Block "CircleCIExtraParams" }}
+  ## <</Stencil::Block>>
 
 
 # Extra contexts to expose to all jobs below
