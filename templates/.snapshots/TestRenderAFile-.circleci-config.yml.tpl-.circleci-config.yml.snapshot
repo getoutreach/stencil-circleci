@@ -12,6 +12,9 @@ parameters:
   release_rc:
     type: boolean
     default: false
+  ## <<Stencil::Block(CircleCIExtraParams)>>
+
+  ## <</Stencil::Block>>
 
 
 # Extra contexts to expose to all jobs below

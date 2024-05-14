@@ -9,6 +9,9 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
+  ## <<Stencil::Block(CircleCIExtraParams)>>
+
+  ## <</Stencil::Block>>
 
 
 # Extra contexts to expose to all jobs below
