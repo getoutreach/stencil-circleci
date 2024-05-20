@@ -95,12 +95,18 @@ workflows:
     jobs:
       - shared/trigger_rc_release:
           context: *contexts
+          ## <<Stencil::Block(circleAutoTriggerRCExtra)>>
+
+          ## <</Stencil::Block>>
 
   manual-release-rc:
     when: << pipeline.parameters.release_rc>>
     jobs:
       - shared/trigger_rc_release:
           context: *contexts
+          ## <<Stencil::Block(circleManualTriggerRCExtra)>>
+
+          ## <</Stencil::Block>>
 
   release:
     when:
@@ -130,7 +136,6 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: false
           context: *contexts
-          release_failure_slack_channel: 
           ## <<Stencil::Block(circlePreReleaseExtra)>>
 
           ## <</Stencil::Block>>

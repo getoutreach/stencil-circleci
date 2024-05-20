@@ -5,6 +5,7 @@ version: 2.1
 {{- $prereleaseBranch := stencil.Arg "releaseOptions.prereleasesBranch" }}
 {{- $testNodeClient := and (or (not (stencil.Arg "service")) (has "grpc" (stencil.Arg "serviceActivities"))) (has "node" (stencil.Arg "grpcClients")) }}
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
+{{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
   queue: eddiewebb/queue@2.2.1
@@ -140,6 +141,12 @@ workflows:
     jobs:
       - shared/trigger_rc_release:
           context: *contexts
+          {{- if $releaseFailureSlackChannel }}
+          release_failure_slack_channel: "{{ $releaseFailureSlackChannel }}"
+          {{- end }}
+          ## <<Stencil::Block(circleAutoTriggerRCExtra)>>
+{{ file.Block "circleAutoTriggerRCExtra" }}
+          ## <</Stencil::Block>>
   {{- end }}
 
   {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
@@ -149,6 +156,12 @@ workflows:
     jobs:
       - shared/trigger_rc_release:
           context: *contexts
+          {{- if $releaseFailureSlackChannel }}
+          release_failure_slack_channel: "{{ $releaseFailureSlackChannel }}"
+          {{- end }}
+          ## <<Stencil::Block(circleManualTriggerRCExtra)>>
+{{ file.Block "circleManualTriggerRCExtra" }}
+          ## <</Stencil::Block>>
   {{- end }}
 
   release:
@@ -187,7 +200,6 @@ workflows:
           node_client: true
           {{- end }}
           context: *contexts
-          {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
           {{- if $releaseFailureSlackChannel }}
           release_failure_slack_channel: "{{ $releaseFailureSlackChannel }}"
           {{- end }}
@@ -210,7 +222,9 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: false
           context: *contexts
-          release_failure_slack_channel: {{ $releaseFailureSlackChannel }}
+          {{- if $releaseFailureSlackChannel }}
+          release_failure_slack_channel: "{{ $releaseFailureSlackChannel }}"
+          {{- end }}
           ## <<Stencil::Block(circlePreReleaseExtra)>>
 {{ file.Block "circlePreReleaseExtra" }}
           ## <</Stencil::Block>>
