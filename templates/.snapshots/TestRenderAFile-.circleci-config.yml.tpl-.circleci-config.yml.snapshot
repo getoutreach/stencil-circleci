@@ -89,6 +89,9 @@ workflows:
     jobs:
       - shared/trigger_rc_release:
           context: *contexts
+          ## <<Stencil::Block(circleManualTriggerRCExtra)>>
+
+          ## <</Stencil::Block>>
 
   release:
     when:
