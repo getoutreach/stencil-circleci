@@ -4,7 +4,7 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.21
 
-require github.com/getoutreach/stencil v1.38.1-rc.3
+require github.com/getoutreach/stencil v1.38.1
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
@@ -44,7 +44,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/hashicorp/go-plugin v1.6.0 // indirect
+	github.com/hashicorp/go-plugin v1.6.1 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
