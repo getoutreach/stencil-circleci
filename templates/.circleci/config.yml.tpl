@@ -63,12 +63,12 @@ test: &test
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
-  {{- $stableBranch := "main" }}
+  {{- $stableBranch := $defaultBranch }}
   {{- if $prereleases }}
   {{- $pb := stencil.Arg "releaseOptions.prereleasesBranch" }}
   {{- $stableBranch = "release" }}
   # Release branch
-  - release
+  - {{ $stableBranch | squote }}
   # Pre-releases branch
   - {{ default $defaultBranch $pb | squote }}
     {{- /*

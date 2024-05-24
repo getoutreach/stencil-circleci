@@ -9,9 +9,6 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
-  release_rc:
-    type: boolean
-    default: false
   ## <<Stencil::Block(CircleCIExtraParams)>>
 
   ## <</Stencil::Block>>
@@ -45,9 +42,6 @@ test: &test
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
-  # Release branch
-  - 'release'
-  # Pre-releases branch
   - 'main'
 
 jobs:  {} 
@@ -84,35 +78,10 @@ workflows:
     jobs:
       - shared/save_cache: *test
 
-  auto-release-rc:
-    triggers:
-      - schedule:
-          cron: 0 19 * * 2
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - shared/trigger_rc_release:
-          context: *contexts
-          ## <<Stencil::Block(circleAutoTriggerRCExtra)>>
-
-          ## <</Stencil::Block>>
-
-  manual-release-rc:
-    when: << pipeline.parameters.release_rc>>
-    jobs:
-      - shared/trigger_rc_release:
-          context: *contexts
-          ## <<Stencil::Block(circleManualTriggerRCExtra)>>
-
-          ## <</Stencil::Block>>
-
   release:
     when:
       and:
         - not: << pipeline.parameters.rebuild_cache >>
-        - not: << pipeline.parameters.release_rc >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 
@@ -132,22 +101,7 @@ workflows:
             - shared/test
           filters:
             branches:
-              only: release
-      - shared/pre-release: &pre-release
-          dryrun: false
-          context: *contexts
-          ## <<Stencil::Block(circlePreReleaseExtra)>>
-
-          ## <</Stencil::Block>>
-          requires:
-            ## <<Stencil::Block(circlePreReleaseRequires)>>
-
-            ## <</Stencil::Block>>
-            - shared/test
-          filters:
-            branches:
-              only:
-                - main
+              only: main
       # Dryrun for PRs
       - shared/pre-release: &pre-release
           dryrun: true
