@@ -68,7 +68,7 @@ release_branches: &release_branches
   {{- $pb := stencil.Arg "releaseOptions.prereleasesBranch" }}
   {{- $stableBranch = "release" }}
   # Release branch
-  - {{ $stableBranch | squote }}
+  - {{ $stableBranch | quote }}
   # Pre-releases branch
   - {{ default $defaultBranch $pb | squote }}
     {{- /*

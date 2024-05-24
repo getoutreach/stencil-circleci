@@ -34,8 +34,8 @@ func TestConfigForDisabledPrerelease(t *testing.T) {
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
+			// when enablePrereleases is false, other prerelease options are ignored
 			"enablePrereleases": false,
-			"prereleasesBranch": "",
 		},
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
