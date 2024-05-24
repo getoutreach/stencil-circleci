@@ -26,7 +26,7 @@ contexts: &contexts
   - tray-webhooks
   - wizcli
   ## <<Stencil::Block(extraContexts)>>
-
+  
   ## <</Stencil::Block>>
 
 # Test configs to pass to test and cache jobs
@@ -44,7 +44,7 @@ test: &test
 release_branches: &release_branches
   - 'main'
 
-jobs:  {}
+jobs:  {} 
   ## <<Stencil::Block(circleJobs)>>
 
   ## <</Stencil::Block>>
