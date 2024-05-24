@@ -48,7 +48,7 @@ release_branches: &release_branches
   # Release branch
   - release
   # Pre-releases branch
-  - 'main'
+  - "main"
 
 jobs:  {} 
   ## <<Stencil::Block(circleJobs)>>
