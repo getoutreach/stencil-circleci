@@ -46,7 +46,7 @@ test: &test
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
   # Release branch
-  - release
+  - "release"
   # Pre-releases branch
   - 'main'
 
@@ -118,6 +118,21 @@ workflows:
           filters:
             branches:
               only: release
+      - shared/pre-release: &pre-release
+          dryrun: false
+          context: *contexts
+          ## <<Stencil::Block(circlePreReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circlePreReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
+          filters:
+            branches:
+              only:
+                - main
       # Dryrun for PRs
       - shared/pre-release: &pre-release
           dryrun: true

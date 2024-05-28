@@ -63,12 +63,12 @@ test: &test
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
-  {{- $stableBranch := "main" }}
+  {{- $stableBranch := $defaultBranch }}
   {{- if $prereleases }}
   {{- $pb := stencil.Arg "releaseOptions.prereleasesBranch" }}
   {{- $stableBranch = "release" }}
   # Release branch
-  - release
+  - {{ $stableBranch | quote }}
   # Pre-releases branch
   - {{ default $defaultBranch $pb | squote }}
     {{- /*
@@ -124,7 +124,7 @@ workflows:
     when: << pipeline.parameters.rebuild_cache >>
     jobs:
       - shared/save_cache: *test
-  {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
+  {{- if and (stencil.Arg "releaseOptions.enablePrereleases") (stencil.Arg "releaseOptions.autoPrereleases") }}
 
   auto-release-rc:
     triggers:
@@ -218,7 +218,7 @@ workflows:
             branches:
               only: {{ $stableBranch }}
 
-      {{- if stencil.Arg "releaseOptions.autoPrereleases" }}
+      {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
       - shared/pre-release: &pre-release
           dryrun: false
           context: *contexts
