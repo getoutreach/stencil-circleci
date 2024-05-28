@@ -70,17 +70,17 @@ release_branches: &release_branches
   # Release branch
   - {{ $stableBranch | quote }}
   # Pre-releases branch
-  - {{ default $defaultBranch $pb | squote }}
+  - {{ default $defaultBranch $pb | quote }}
     {{- /*
       If we have a pre-release branch set, but it's not the
       default branch we need to include the default branch
       */}}
     {{- if and $pb (ne $pb $defaultBranch) }}
   # Unstable branch, e.g. HEAD development
-  - {{ $defaultBranch | squote }}
+  - {{ $defaultBranch | quote }}
     {{- end }}
   {{- else }}
-  - {{ $defaultBranch | squote }}
+  - {{ $defaultBranch | quote }}
   {{- end }}
 
 jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook "jobs")) }} {} {{ end }}
