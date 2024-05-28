@@ -30,6 +30,29 @@ func TestConfigForAutoPrerelease(t *testing.T) {
 	st.Run(stenciltest.RegenerateSnapshots())
 }
 
+func TestConfigForDisabledPrerelease(t *testing.T) {
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	st.Args(map[string]interface{}{
+		"releaseOptions": map[string]interface{}{
+			// when enablePrereleases is false, other prerelease options are ignored
+			"enablePrereleases": false,
+		},
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
+func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	st.Args(map[string]interface{}{
+		"releaseOptions": map[string]interface{}{
+			"enablePrereleases": false,
+			// The autoPrereleases should be ignored.
+			"autoPrereleases": true,
+		},
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
 func TestConfigForLibraryWithNodeJSGRPCClient(t *testing.T) {
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
