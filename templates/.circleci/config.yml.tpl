@@ -9,6 +9,9 @@ version: 2.1
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
   queue: eddiewebb/queue@2.2.1
+  ## <<Stencil::Block(CircleCIExtraOrbs)>>
+{{ file.Block "CircleCIExtraOrbs" }}
+  ## <</Stencil::Block>>
 
 parameters:
   rebuild_cache:
