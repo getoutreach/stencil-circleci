@@ -2,9 +2,11 @@
 
 module github.com/getoutreach/stencil-circleci
 
-go 1.21
+go 1.22
 
-require github.com/getoutreach/stencil v1.39.0-rc.1
+toolchain go1.22.6
+
+require github.com/getoutreach/stencil v1.39.1
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
@@ -76,8 +78,8 @@ require (
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/oauth2 v0.20.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/term v0.21.0 // indirect
+	golang.org/x/sys v0.22.0 // indirect
+	golang.org/x/term v0.22.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
 	google.golang.org/grpc v1.62.1 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
