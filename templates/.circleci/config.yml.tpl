@@ -86,6 +86,10 @@ release_branches: &release_branches
   - {{ $defaultBranch | quote }}
   {{- end }}
 
+## <<Stencil::Block(circleAnchorExtra)>>
+{{ file.Block "circleAnchorExtra" }}
+## <</Stencil::Block>>
+
 jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook "jobs")) }} {} {{ end }}
   ## <<Stencil::Block(circleJobs)>>
 {{ file.Block "circleJobs" }}

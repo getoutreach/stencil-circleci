@@ -47,6 +47,10 @@ test: &test
 release_branches: &release_branches
   - "main"
 
+## <<Stencil::Block(circleAnchorExtra)>>
+
+## <</Stencil::Block>>
+
 jobs:  {} 
   ## <<Stencil::Block(circleJobs)>>
 
