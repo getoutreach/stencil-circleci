@@ -23,6 +23,7 @@ contexts: &contexts
   - ghaccesstoken
   - docker-registry
   - npm-credentials
+  - box
   - vault-dev
   - confluence
   - circleci-credentials
