@@ -98,8 +98,8 @@ workflows:
       ### End jobs inserted by other modules
       - shared/test_node_client:
           context: *contexts
-          docker_image: registry.example.com/foo/bootstrap/ci-slim
-          executor_name: shared/testbed-docker
+          docker_image: registry.example.amazonaws.com/foo/bootstrap/ci-slim
+          executor_name: shared/testbed-docker-aws
           steps:
             ## <<Stencil::Block(testNodeClientSteps)>>
             []
