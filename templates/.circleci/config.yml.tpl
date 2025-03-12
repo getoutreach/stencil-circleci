@@ -8,9 +8,9 @@ version: 2.1
 {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
 {{- $executorName := "" }}
 {{- if contains "amazonaws.com" .Runtime.Box.Docker.ImagePullRegistry }}
-{{- $executorName = "shared/testbed-docker-aws" }}
+{{- $executorName = "testbed-docker-aws" }}
 {{- else }}
-{{- $executorName = "shared/testbed-docker" }}
+{{- $executorName = "testbed-docker" }}
 {{- end }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}

@@ -99,7 +99,7 @@ workflows:
       - shared/test_node_client:
           context: *contexts
           docker_image: registry.example.com/foo/bootstrap/ci-slim
-          executor_name: shared/testbed-docker
+          executor_name: testbed-docker
           steps:
             ## <<Stencil::Block(testNodeClientSteps)>>
             []
