@@ -30,6 +30,7 @@ func fakeECRPullRegistry(t *testing.T) {
 }
 
 func TestRenderAFile(t *testing.T) {
+	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
@@ -41,6 +42,7 @@ func TestRenderAFile(t *testing.T) {
 }
 
 func TestConfigForAutoPrerelease(t *testing.T) {
+	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
@@ -53,6 +55,7 @@ func TestConfigForAutoPrerelease(t *testing.T) {
 }
 
 func TestConfigForDisabledPrerelease(t *testing.T) {
+	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
@@ -64,6 +67,7 @@ func TestConfigForDisabledPrerelease(t *testing.T) {
 }
 
 func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
+	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{
@@ -106,6 +110,7 @@ func TestConfigForLibraryWithNodeJSGRPCClientAndECR(t *testing.T) {
 }
 
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
+	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"releaseOptions": map[string]interface{}{

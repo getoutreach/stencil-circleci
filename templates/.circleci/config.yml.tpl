@@ -275,6 +275,8 @@ workflows:
           ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
+          docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
+          executor_name: {{ $executorName }}
           filters:
             branches:
               only:
