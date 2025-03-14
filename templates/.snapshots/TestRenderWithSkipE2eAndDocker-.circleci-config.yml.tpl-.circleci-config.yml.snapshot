@@ -163,6 +163,8 @@ workflows:
           ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
+          docker_image: registry.example.com/foo/bootstrap/ci-slim
+          executor_name: testbed-docker
           filters:
             branches:
               only:

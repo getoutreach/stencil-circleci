@@ -6,6 +6,12 @@ version: 2.1
 {{- $testNodeClient := and (or (not (stencil.Arg "service")) (has "grpc" (stencil.Arg "serviceActivities"))) (has "node" (stencil.Arg "grpcClients")) }}
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
+{{- $executorName := "" }}
+{{- if contains "amazonaws.com" .Runtime.Box.Docker.ImagePullRegistry }}
+{{- $executorName = "testbed-docker-aws" }}
+{{- else }}
+{{- $executorName = "testbed-docker" }}
+{{- end }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
   queue: eddiewebb/queue@2.2.1
@@ -192,6 +198,8 @@ workflows:
       {{- if $testNodeClient }}
       - shared/test_node_client:
           context: *contexts
+          docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
+          executor_name: {{ $executorName }}
           steps:
             ## <<Stencil::Block(testNodeClientSteps)>>
 {{ file.Block "testNodeClientSteps" | default "[]" | fromYaml | toYaml | indent 12 }}
@@ -267,6 +275,8 @@ workflows:
           ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
+          docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
+          executor_name: {{ $executorName }}
           filters:
             branches:
               only:
