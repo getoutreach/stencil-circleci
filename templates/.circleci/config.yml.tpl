@@ -58,6 +58,8 @@ contexts: &contexts
 test: &test
   context: *contexts
   app_name: {{ .Config.Name }}
+  docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
+  executor_name: {{ $executorName }}
   ### Start parameters inserted by other modules
   {{- /* [][]interface{} */}}
   {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
