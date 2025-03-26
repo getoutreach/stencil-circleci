@@ -37,6 +37,8 @@ contexts: &contexts
 test: &test
   context: *contexts
   app_name: testing
+  docker_image: registry.example.com/foo/bootstrap/ci-slim
+  executor_name: testbed-docker
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
   ## <<Stencil::Block(circleTestExtra)>>
