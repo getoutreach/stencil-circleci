@@ -29,6 +29,10 @@ arguments:
     schema:
       type: string
     description: The slack channel notify for build and release failures.
+  oss:
+    schema:
+      type: boolean
+    description: See stencil-base
   releaseOptions.enablePrereleases:
     description: Enables pre-releasing via semantic-release
     schema:

@@ -127,3 +127,12 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
+
+func TestRenderAsOSSRepo(t *testing.T) {
+	fakeDockerPullRegistry(t)
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	st.Args(map[string]interface{}{
+		"oss": true,
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}

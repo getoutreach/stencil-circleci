@@ -15,6 +15,10 @@ version: 2.1
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
   queue: eddiewebb/queue@2.2.1
+  {{- $orbsHook := (stencil.GetModuleHook "orbs") }}
+  {{- range $orbsHook }}
+{{ toYaml . | indent 2 }}
+  {{- end }}
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 {{ file.Block "CircleCIExtraOrbs" }}
   ## <</Stencil::Block>>
@@ -58,8 +62,10 @@ contexts: &contexts
 test: &test
   context: *contexts
   app_name: {{ .Config.Name }}
+  {{- if not (stencil.Arg "oss") }}
   docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
   executor_name: {{ $executorName }}
+  {{- end }}
   ### Start parameters inserted by other modules
   {{- /* [][]interface{} */}}
   {{- $testParametersHook := (stencil.GetModuleHook "workflows.release.jobs.test.parameters") }}
@@ -200,8 +206,10 @@ workflows:
       {{- if $testNodeClient }}
       - shared/test_node_client:
           context: *contexts
+          {{- if not (stencil.Arg "oss") }}
           docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
           executor_name: {{ $executorName }}
+          {{- end }}
           steps:
             ## <<Stencil::Block(testNodeClientSteps)>>
 {{ file.Block "testNodeClientSteps" | default "[]" | fromYaml | toYaml | indent 12 }}
@@ -277,8 +285,10 @@ workflows:
           ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
+          {{- if not (stencil.Arg "oss") }}
           docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
           executor_name: {{ $executorName }}
+          {{- end }}
           filters:
             branches:
               only:
