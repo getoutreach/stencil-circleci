@@ -1,8 +1,8 @@
-# Please re-run stencil after any changes to this file as invalid
+(*codegen.File)(# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@dev:2.31.0-rc.1
+  shared: getoutreach/shared@2.30.0
   queue: eddiewebb/queue@2.2.1
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
@@ -12,16 +12,16 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
-  release_rc:
-    type: boolean
-    default: false
   ## <<Stencil::Block(CircleCIExtraParams)>>
 
   ## <</Stencil::Block>>
 
+
 # Extra contexts to expose to all jobs below
 contexts: &contexts
   - aws-credentials
+  - ghaccesstoken
+  - docker-registry
   - npm-credentials
   - box
   - vault-dev
@@ -30,43 +30,31 @@ contexts: &contexts
   - tray-webhooks
   - wizcli
   ## <<Stencil::Block(extraContexts)>>
-  - docker-registry
-  - ghaccesstoken
+  
   ## <</Stencil::Block>>
 
 # Test configs to pass to test and cache jobs
 test: &test
   context: *contexts
-  app_name: stencil-circleci
+  app_name: testing
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
   ## <<Stencil::Block(circleTestExtra)>>
 
   ## <</Stencil::Block>>
 
+
 # Branches used for releasing code, pre-release or not
-release_branches: &release_branches # Release branch
-  - "release"
-  # Pre-releases branch
+release_branches: &release_branches
   - "main"
 
 ## <<Stencil::Block(circleAnchorExtra)>>
 
 ## <</Stencil::Block>>
 
-jobs:
+jobs:  {} 
   ## <<Stencil::Block(circleJobs)>>
-  render:
-    executor:
-      name: shared/testbed-docker-aws
-    steps:
-      - shared/setup_environment
-      - run:
-          name: Install Stencil
-          command: ./.circleci/scripts/download-stencil.sh
-      - run:
-          name: Render Files
-          command: ./.circleci/scripts/render.sh
+
   ## <</Stencil::Block>>
 
   ### Start jobs inserted by other modules
@@ -98,76 +86,30 @@ workflows:
     jobs:
       - shared/save_cache: *test
 
-  auto-release-rc:
-    triggers:
-      - schedule:
-          cron: 0 19 * * 2
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - shared/trigger_rc_release:
-          context: *contexts
-          release_failure_slack_channel: "#dt-notifications"
-          ## <<Stencil::Block(circleAutoTriggerRCExtra)>>
-
-          ## <</Stencil::Block>>
-
-  manual-release-rc:
-    when: << pipeline.parameters.release_rc>>
-    jobs:
-      - shared/trigger_rc_release:
-          context: *contexts
-          release_failure_slack_channel: "#dt-notifications"
-          ## <<Stencil::Block(circleManualTriggerRCExtra)>>
-
-          ## <</Stencil::Block>>
-
   release:
     when:
       and:
         - not: << pipeline.parameters.rebuild_cache >>
-        - not: << pipeline.parameters.release_rc >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
-      - render:
-          context: *contexts
+
       ## <</Stencil::Block>>
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
       - shared/release: &release
           dryrun: false
           context: *contexts
-          release_failure_slack_channel: "#dt-notifications"
           ## <<Stencil::Block(circleReleaseExtra)>>
 
           ## <</Stencil::Block>>
           requires:
             ## <<Stencil::Block(circleReleaseRequires)>>
-            - render
 
             ## <</Stencil::Block>>
             - shared/test
           filters:
             branches:
-              only: release
-      - shared/pre-release: &pre-release
-          dryrun: false
-          context: *contexts
-          release_failure_slack_channel: "#dt-notifications"
-          ## <<Stencil::Block(circlePreReleaseExtra)>>
-
-          ## <</Stencil::Block>>
-          requires:
-            ## <<Stencil::Block(circlePreReleaseRequires)>>
-
-            ## <</Stencil::Block>>
-            - shared/test
-          filters:
-            branches:
-              only:
-                - main
+              only: main
       # Dryrun for PRs
       - shared/pre-release: &pre-release
           dryrun: true
@@ -196,3 +138,33 @@ workflows:
                 - main
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
+      - shared/e2e:
+          context: *contexts
+          ## <<Stencil::Block(circleE2EExtra)>>
+
+          ## <</Stencil::Block>>
+      - shared/docker_stitch:
+          context: *contexts
+          requires:
+            - shared/docker_amd64
+            - shared/docker_arm64
+          filters:
+            branches:
+              ignore: *release_branches
+            tags:
+              only: /v\d+(\.\d+)*(-.*)*/
+      - shared/docker_amd64:
+          context: *contexts
+          filters:
+            branches:
+              ignore: *release_branches
+            tags:
+              only: /v\d+(\.\d+)*(-.*)*/
+      - shared/docker_arm64:
+          context: *contexts
+          filters:
+            branches:
+              ignore: *release_branches
+            tags:
+              only: /v\d+(\.\d+)*(-.*)*/
+)
