@@ -15,6 +15,10 @@ version: 2.1
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
   queue: eddiewebb/queue@2.2.1
+  {{- $orbsHook := (stencil.GetModuleHook "orbs") }}
+  {{- range $orbsHook }}
+{{ toYaml . | indent 2 }}
+  {{- end }}
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 {{ file.Block "CircleCIExtraOrbs" }}
   ## <</Stencil::Block>>
