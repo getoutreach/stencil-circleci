@@ -6,7 +6,7 @@ go 1.23.0
 
 toolchain go1.23.4
 
-require github.com/getoutreach/stencil v1.41.1-0.20250421145204-6504f6338e70
+require github.com/getoutreach/stencil v1.42.0-rc.1
 
 require (
 	dario.cat/mergo v1.0.1 // indirect
