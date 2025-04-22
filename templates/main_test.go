@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/getoutreach/stencil/pkg/configuration"
 	"github.com/getoutreach/stencil/pkg/stenciltest"
 )
 
@@ -38,6 +39,12 @@ func TestRenderAFile(t *testing.T) {
 			"prereleasesBranch": "main",
 		},
 	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
+	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
 
@@ -51,6 +58,12 @@ func TestConfigForAutoPrerelease(t *testing.T) {
 			"autoPrereleases":   true,
 		},
 	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
+	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
 
@@ -62,6 +75,12 @@ func TestConfigForDisabledPrerelease(t *testing.T) {
 			// when enablePrereleases is false, other prerelease options are ignored
 			"enablePrereleases": false,
 		},
+	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
@@ -75,6 +94,12 @@ func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
 			// The autoPrereleases should be ignored.
 			"autoPrereleases": true,
 		},
+	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
@@ -133,6 +158,12 @@ func TestRenderAsOSSRepo(t *testing.T) {
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
 	st.Args(map[string]interface{}{
 		"oss": true,
+	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
