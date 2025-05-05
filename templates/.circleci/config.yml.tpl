@@ -63,7 +63,6 @@ test: &test
   context: *contexts
   app_name: {{ .Config.Name }}
   {{- if not (stencil.Arg "oss") }}
-  docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
   executor_name: {{ $executorName }}
   {{- end }}
   ### Start parameters inserted by other modules
@@ -207,7 +206,6 @@ workflows:
       - shared/test_node_client:
           context: *contexts
           {{- if not (stencil.Arg "oss") }}
-          docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
           executor_name: {{ $executorName }}
           {{- end }}
           steps:
@@ -286,7 +284,6 @@ workflows:
       - shared/publish_docs:
           context: *contexts
           {{- if not (stencil.Arg "oss") }}
-          docker_image: {{ .Runtime.Box.Docker.ImagePullRegistry }}/bootstrap/ci-slim
           executor_name: {{ $executorName }}
           {{- end }}
           filters:

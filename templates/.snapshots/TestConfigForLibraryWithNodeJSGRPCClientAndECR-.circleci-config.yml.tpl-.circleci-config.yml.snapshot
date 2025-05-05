@@ -37,7 +37,6 @@ contexts: &contexts
 test: &test
   context: *contexts
   app_name: testing
-  docker_image: registry.example.amazonaws.com/foo/bootstrap/ci-slim
   executor_name: testbed-docker-aws
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
@@ -100,7 +99,6 @@ workflows:
       ### End jobs inserted by other modules
       - shared/test_node_client:
           context: *contexts
-          docker_image: registry.example.amazonaws.com/foo/bootstrap/ci-slim
           executor_name: testbed-docker-aws
           steps:
             ## <<Stencil::Block(testNodeClientSteps)>>
@@ -148,7 +146,6 @@ workflows:
           ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
-          docker_image: registry.example.amazonaws.com/foo/bootstrap/ci-slim
           executor_name: testbed-docker-aws
           filters:
             branches:
