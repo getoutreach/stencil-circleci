@@ -116,7 +116,6 @@ jobs: {{ if and (empty (file.Block "circleJobs")) (empty (stencil.GetModuleHook 
   ### End jobs inserted by other modules
 
 workflows:
-  version: 2
   ## <<Stencil::Block(circleWorkflows)>>
 {{ file.Block "circleWorkflows" }}
   ## <</Stencil::Block>>
