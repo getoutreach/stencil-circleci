@@ -51,6 +51,10 @@ arguments:
     description: The name of the orb to publish, if releaseOptions.publishOrb is true.
     schema:
       type: string
+  releaseOptions.orbPath:
+    description: The path to the orb source directory, if releaseOptions.publishOrb is true.
+    schema:
+      type: string
   releaseOptions.publishOrb:
     description: Publishes the orb defined in the repository to the CircleCI orb registry.
     schema:

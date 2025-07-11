@@ -2,7 +2,7 @@
 
 {{- define "publishOrbReleaseRC" }}
 - - "@semantic-release/exec"
-  - prepareCmd: make build-orb
+  - prepareCmd: mise run orb:build
 - - "@getoutreach/semantic-release-circleci-orb"
   - orbName: "{{ stencil.Arg "releaseOptions.orbName" }}"
     orbPath: "orb.yml"
