@@ -21,7 +21,7 @@ $(grep ^golang "$ROOT_DIR/.tool-versions")
 $(grep ^nodejs "$ROOT_DIR/.tool-versions")
 ## <</Stencil::Block>>
 EOF
-go mod init
+go mod init example.com/stencil-circleci/integration
 git commit --allow-empty -m "initial commit"
 
 cat >service.yaml <<EOF
