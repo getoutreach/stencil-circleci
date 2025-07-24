@@ -9,8 +9,14 @@ if ! command -v stencil >/dev/null 2>&1; then
 
   pushd "$tempDir" >/dev/null || exit 1
   REPO=getoutreach/stencil
-  TAG=$(gh release -R "$REPO" list | grep Latest | awk '{ print $1 }')
-  echo "Using stencil version: ($TAG)"
+  if [[ -n $STENCIL_USE_PRERELEASE ]]; then
+    echo "Using prerelease stencil version"
+    TAG=$(gh release --repo "$REPO" list --exclude-drafts --json name --jq '.[] | select(.name != "unstable").name' --limit 1)
+  else
+    echo "Using latest stable stencil version"
+    TAG=$(gh release --repo "$REPO" list --json name,isLatest --jq '.[] | select(.isLatest).name')
+  fi
+  echo "Downloading stencil version: ($TAG)"
   gh release -R "$REPO" download "$TAG" --pattern "stencil_*_$(go env GOOS)_$(go env GOARCH).tar.gz"
 
   echo "" # Fixes issues with output being corrupted in CI

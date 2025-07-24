@@ -1,6 +1,7 @@
 package main
 
 import (
+	"maps"
 	"os"
 	"testing"
 
@@ -30,11 +31,23 @@ func fakeECRPullRegistry(t *testing.T) {
 	})
 }
 
+// setTestArgs is a helper function to set arguments for the stencil test.
+// In particular, it provides default values for "required" arguments from
+// dependent modules.
+func setTestArgs(st *stenciltest.Template, args map[string]any) {
+	stArgs := map[string]any{
+		"description":   "Service description",
+		"reportingTeam": "foo-bar",
+	}
+	maps.Copy(stArgs, args)
+	st.Args(stArgs)
+}
+
 func TestRenderAFile(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"releaseOptions": map[string]interface{}{
+	setTestArgs(st, map[string]any{
+		"releaseOptions": map[string]any{
 			"enablePrereleases": true,
 			"prereleasesBranch": "main",
 		},
@@ -51,8 +64,8 @@ func TestRenderAFile(t *testing.T) {
 func TestConfigForAutoPrerelease(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"releaseOptions": map[string]interface{}{
+	setTestArgs(st, map[string]any{
+		"releaseOptions": map[string]any{
 			"enablePrereleases": true,
 			"prereleasesBranch": "main",
 			"autoPrereleases":   true,
@@ -70,8 +83,8 @@ func TestConfigForAutoPrerelease(t *testing.T) {
 func TestConfigForDisabledPrerelease(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"releaseOptions": map[string]interface{}{
+	setTestArgs(st, map[string]any{
+		"releaseOptions": map[string]any{
 			// when enablePrereleases is false, other prerelease options are ignored
 			"enablePrereleases": false,
 		},
@@ -88,8 +101,8 @@ func TestConfigForDisabledPrerelease(t *testing.T) {
 func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"releaseOptions": map[string]interface{}{
+	setTestArgs(st, map[string]any{
+		"releaseOptions": map[string]any{
 			"enablePrereleases": false,
 			// The autoPrereleases should be ignored.
 			"autoPrereleases": true,
@@ -107,12 +120,12 @@ func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
 func TestConfigForLibraryWithNodeJSGRPCClient(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"grpcClients": []interface{}{
+	setTestArgs(st, map[string]any{
+		"grpcClients": []any{
 			"node",
 		},
 		"service": false,
-		"versions": map[string]interface{}{
+		"versions": map[string]any{
 			"devbase": "my-custom-version",
 		},
 	})
@@ -122,12 +135,12 @@ func TestConfigForLibraryWithNodeJSGRPCClient(t *testing.T) {
 func TestConfigForLibraryWithNodeJSGRPCClientAndECR(t *testing.T) {
 	fakeECRPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"grpcClients": []interface{}{
+	setTestArgs(st, map[string]any{
+		"grpcClients": []any{
 			"node",
 		},
 		"service": false,
-		"versions": map[string]interface{}{
+		"versions": map[string]any{
 			"devbase": "my-custom-version",
 		},
 	})
@@ -137,15 +150,15 @@ func TestConfigForLibraryWithNodeJSGRPCClientAndECR(t *testing.T) {
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
-		"releaseOptions": map[string]interface{}{
+	setTestArgs(st, map[string]any{
+		"releaseOptions": map[string]any{
 			"enablePrereleases": true,
 			"prereleasesBranch": "main",
 		},
-		"versions": map[string]interface{}{
+		"versions": map[string]any{
 			"devbase": "my-custom-version",
 		},
-		"ciOptions": map[string]interface{}{
+		"ciOptions": map[string]any{
 			"skipE2e":    true,
 			"skipDocker": true,
 		},
@@ -156,7 +169,7 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 func TestRenderAsOSSRepo(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	st.Args(map[string]interface{}{
+	setTestArgs(st, map[string]any{
 		"oss": true,
 	})
 	// We don't actually need any templates from devbase, so using a
