@@ -12,7 +12,6 @@ if ! command -v stencil >/dev/null 2>&1; then
   if [[ -n $STENCIL_USE_PRERELEASE ]]; then
     echo "Using prerelease stencil version"
     TAG=$(gh release --repo "$REPO" list --exclude-drafts --json name --jq '.[] | select(.name != "unstable")' --limit 1)
-    gh release -R "$REPO" download --prerelease --pattern "stencil_*_$(go env GOOS)_$(go env GOARCH).tar.gz"
   else
     echo "Using latest stable stencil version"
     TAG=$(gh release --repo "$REPO" list --json name,isLatest --jq '.[] | select(.isLatest).name')
