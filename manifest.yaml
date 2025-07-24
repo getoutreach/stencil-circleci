@@ -3,6 +3,8 @@ name: github.com/getoutreach/stencil-circleci
 modules:
   - name: github.com/getoutreach/devbase
     version: ">=v2.33.0-rc.7"
+  - name: github.com/getoutreach/stencil-base
+    version: ">=v0.17.0-rc.1"
 stencilVersion: "^v1.43.0-rc.4"
 arguments:
   ciOptions.skipDocker:
