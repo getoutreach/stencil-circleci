@@ -22,6 +22,10 @@ $(grep ^nodejs "$ROOT_DIR/.tool-versions")
 ## <</Stencil::Block>>
 EOF
 go mod init example.com/stencil-circleci/integration
+cat >Makefile <<EOF
+fmt:
+	@echo "Stub formatter"
+EOF
 git commit --allow-empty -m "initial commit"
 
 cat >service.yaml <<EOF
