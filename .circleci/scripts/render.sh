@@ -24,6 +24,8 @@ modules:
 replacements:
   github.com/getoutreach/stencil-circleci: 'file://$moduleDir'
 arguments:
+  description: "Service description"
+  reportingTeam: "foo-bar"
   releaseOptions:
     enablePrereleases: true
     prereleasesBranch: rc
