@@ -17,6 +17,7 @@ git config user.name "CircleCI"
 git config user.email "circleci@outreach.io"
 cat >.tool-versions <<EOF
 ## <<Stencil::Block(toolver)>>
+$(grep ^golang "$ROOT_DIR/.tool-versions")
 $(grep ^nodejs "$ROOT_DIR/.tool-versions")
 ## <</Stencil::Block>>
 EOF
