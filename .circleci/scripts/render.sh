@@ -25,6 +25,8 @@ go mod init example.com/stencil-circleci/integration
 cat >Makefile <<EOF
 fmt:
 	@echo "Stub formatter"
+gogenerate:
+	@echo "Stub gogenerate"
 EOF
 git commit --allow-empty -m "initial commit"
 
