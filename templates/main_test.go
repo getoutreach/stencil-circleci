@@ -2,7 +2,6 @@ package main
 
 import (
 	"maps"
-	"os"
 	"testing"
 
 	"github.com/getoutreach/stencil/pkg/configuration"
