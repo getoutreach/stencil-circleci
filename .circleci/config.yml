@@ -2,7 +2,7 @@
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@dev:2.33.0-rc.2
+  shared: getoutreach/shared@dev:2.33.0-rc.13
   queue: eddiewebb/queue@2.2.1
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
@@ -42,7 +42,7 @@ test: &test
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
   ## <<Stencil::Block(circleTestExtra)>>
-
+  docker_tag: latest
   ## <</Stencil::Block>>
 
 # Branches used for releasing code, pre-release or not
@@ -113,7 +113,7 @@ workflows:
           context: *contexts
           release_failure_slack_channel: "#dt-notifications"
           ## <<Stencil::Block(circleAutoTriggerRCExtra)>>
-
+          docker_tag: latest
           ## <</Stencil::Block>>
 
   manual-release-rc:
@@ -123,7 +123,7 @@ workflows:
           context: *contexts
           release_failure_slack_channel: "#dt-notifications"
           ## <<Stencil::Block(circleManualTriggerRCExtra)>>
-
+          docker_tag: latest
           ## <</Stencil::Block>>
 
   release:
@@ -143,7 +143,7 @@ workflows:
           context: *contexts
           release_failure_slack_channel: "#dt-notifications"
           ## <<Stencil::Block(circleReleaseExtra)>>
-
+          docker_tag: latest
           ## <</Stencil::Block>>
           requires:
             ## <<Stencil::Block(circleReleaseRequires)>>
@@ -159,7 +159,7 @@ workflows:
           context: *contexts
           release_failure_slack_channel: "#dt-notifications"
           ## <<Stencil::Block(circlePreReleaseExtra)>>
-
+          docker_tag: latest
           ## <</Stencil::Block>>
           requires:
             ## <<Stencil::Block(circlePreReleaseRequires)>>
@@ -175,7 +175,7 @@ workflows:
           dryrun: true
           context: *contexts
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
-
+          docker_tag: latest
           ## <</Stencil::Block>>
           requires:
             ## <<Stencil::Block(circlePreReleaseDryRunRequires)>>
