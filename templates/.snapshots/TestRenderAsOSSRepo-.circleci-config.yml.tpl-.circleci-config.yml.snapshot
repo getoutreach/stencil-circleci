@@ -113,6 +113,7 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: true
           context: *contexts
+          executor_name: oss-docker
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 
           ## <</Stencil::Block>>
@@ -126,6 +127,7 @@ workflows:
               ignore: *release_branches
       - shared/test:
           <<: *test
+          executor_name: oss-docker
           ## <<Stencil::Block(circleSharedTestExtra)>>
 
           ## <</Stencil::Block>>
