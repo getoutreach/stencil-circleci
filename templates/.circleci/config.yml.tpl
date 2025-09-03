@@ -266,6 +266,7 @@ workflows:
           context: *contexts
           {{- if stencil.Arg "oss" }}
           executor_name: oss-docker
+          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
           {{- end }}
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 {{ file.Block "circlePreReleaseDryRunExtra" }}
@@ -282,6 +283,7 @@ workflows:
           <<: *test
           {{- if stencil.Arg "oss" }}
           executor_name: oss-docker
+          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
           {{- end }}
           ## <<Stencil::Block(circleSharedTestExtra)>>
 {{ file.Block "circleSharedTestExtra" }}

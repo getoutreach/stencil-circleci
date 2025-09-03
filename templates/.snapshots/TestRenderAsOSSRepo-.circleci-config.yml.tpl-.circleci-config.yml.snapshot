@@ -114,6 +114,7 @@ workflows:
           dryrun: true
           context: *contexts
           executor_name: oss-docker
+          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 
           ## <</Stencil::Block>>
@@ -128,6 +129,7 @@ workflows:
       - shared/test:
           <<: *test
           executor_name: oss-docker
+          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
           ## <<Stencil::Block(circleSharedTestExtra)>>
 
           ## <</Stencil::Block>>
