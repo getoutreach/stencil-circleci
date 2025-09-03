@@ -264,6 +264,10 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: true
           context: *contexts
+          {{- if stencil.Arg "oss" }}
+          executor_name: oss-docker
+          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
+          {{- end }}
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 {{ file.Block "circlePreReleaseDryRunExtra" }}
           ## <</Stencil::Block>>
@@ -277,6 +281,10 @@ workflows:
               ignore: *release_branches
       - shared/test:
           <<: *test
+          {{- if stencil.Arg "oss" }}
+          executor_name: oss-docker
+          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
+          {{- end }}
           ## <<Stencil::Block(circleSharedTestExtra)>>
 {{ file.Block "circleSharedTestExtra" }}
           ## <</Stencil::Block>>
