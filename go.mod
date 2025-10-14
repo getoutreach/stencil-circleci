@@ -6,7 +6,7 @@ go 1.23.0
 
 toolchain go1.23.4
 
-require github.com/getoutreach/stencil v1.43.0-rc.7
+require github.com/getoutreach/stencil v1.43.0
 
 require (
 	al.essio.dev/pkg/shellescape v1.5.1 // indirect
@@ -77,8 +77,8 @@ require (
 	golang.org/x/crypto v0.40.0 // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
-	golang.org/x/term v0.33.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/term v0.34.0 // indirect
 	golang.org/x/text v0.27.0 // indirect
 	google.golang.org/grpc v1.73.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
