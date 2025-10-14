@@ -42,7 +42,6 @@ test: &test
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
   ## <<Stencil::Block(circleTestExtra)>>
-  docker_tag: latest
   ## <</Stencil::Block>>
 
 # Branches used for releasing code, pre-release or not
