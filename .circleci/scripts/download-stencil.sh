@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Downloads and install stencil via mise
+# Downloads & installs Stencil via mise
 
 set -euo pipefail
 
