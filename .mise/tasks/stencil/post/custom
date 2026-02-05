@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+#MISE description="Ensures that the shared orb is updated in test snapshots"
+
+SKIP_VALIDATE=true make test
