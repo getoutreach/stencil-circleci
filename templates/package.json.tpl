@@ -2,7 +2,7 @@
 
 {{- define "publishOrbNodeJSDeps" }}
 - name: "@getoutreach/semantic-release-circleci-orb"
-  version: "^2.0.1"
+  version: "^3.0.0"
 {{- end }}
 
 {{- if stencil.Arg "releaseOptions.publishOrb" }}
