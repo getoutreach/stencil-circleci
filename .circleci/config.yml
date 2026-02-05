@@ -60,6 +60,7 @@ jobs:
   render:
     executor:
       name: shared/testbed-docker-aws
+      docker_tag: latest
     steps:
       - shared/setup_environment
       - run:
