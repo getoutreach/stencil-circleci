@@ -2,7 +2,7 @@
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@2.34.2
+  shared: getoutreach/shared@dev:2.35.0-rc.16
   queue: eddiewebb/queue@2.2.1
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
@@ -42,6 +42,7 @@ test: &test
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
   ## <<Stencil::Block(circleTestExtra)>>
+  docker_tag: latest
   ## <</Stencil::Block>>
 
 # Branches used for releasing code, pre-release or not
@@ -59,6 +60,7 @@ jobs:
   render:
     executor:
       name: shared/testbed-docker-aws
+      docker_tag: latest
     steps:
       - shared/setup_environment
       - run:
