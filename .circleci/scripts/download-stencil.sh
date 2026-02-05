@@ -1,30 +1,18 @@
 #!/usr/bin/env bash
-# Downloads and install stencil into /usr/local/bin
+# Downloads and install stencil via mise
 
-set -e
+set -euo pipefail
+
+repoName=getoutreach/stencil
 
 if ! command -v stencil >/dev/null 2>&1; then
-  tempDir=$(mktemp -d)
-  cp ".tool-versions" "$tempDir/"
-
-  pushd "$tempDir" >/dev/null || exit 1
-  REPO=getoutreach/stencil
-  if [[ -n $STENCIL_USE_PRERELEASE ]]; then
+  if [[ -n ${STENCIL_USE_PRERELEASE:-} ]]; then
     echo "Using prerelease stencil version"
-    TAG=$(gh release --repo "$REPO" list --exclude-drafts --json name --jq '.[] | select(.name != "unstable").name' --limit 5 | head -n 1)
+    repoTag=$(gh release --repo "$repoName" list --exclude-drafts --json name --jq '.[] | select(.name != "unstable").name' --limit 5 | head -n 1)
   else
     echo "Using latest stable stencil version"
-    TAG=$(gh release --repo "$REPO" list --json name,isLatest --jq '.[] | select(.isLatest).name')
+    repoTag=$(gh release --repo "$repoName" list --json name,isLatest --jq '.[] | select(.isLatest).name')
   fi
-  echo "Downloading stencil version: ($TAG)"
-  gh release -R "$REPO" download "$TAG" --pattern "stencil_*_$(go env GOOS)_$(go env GOARCH).tar.gz"
-
-  echo "" # Fixes issues with output being corrupted in CI
-  tar xf stencil**.tar.gz
-  sudo mv stencil /usr/local/bin/stencil
-  sudo chown circleci:circleci /usr/local/bin/stencil
-  sudo chmod +x /usr/local/bin/stencil
-  popd >/dev/null || exit 1
-
-  rm -rf "$tempDir"
+  echo "Installing stencil version: ($repoTag)"
+  mise use --global github:"$repoName"@"$repoTag"
 fi
