@@ -4,7 +4,7 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.25.0
 
-toolchain go1.25.6
+toolchain go1.25.7
 
 require github.com/getoutreach/stencil v1.43.0
 
