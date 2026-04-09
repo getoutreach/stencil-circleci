@@ -6,7 +6,7 @@
 {{- end }}
 
 {{- define "miseOrbTools" }}
-- circleci: latest
+- circleci: "0.1.34950"
 {{- end }}
 
 {{- if stencil.Arg "releaseOptions.publishOrb" }}
