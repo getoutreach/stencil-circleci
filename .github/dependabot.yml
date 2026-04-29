@@ -17,9 +17,10 @@ updates:
       - dependency-name: github.com/getoutreach/governancelib
       - dependency-name: github.com/getoutreach/datastores/v2
       - dependency-name: github.com/getoutreach/httpx
-      - dependency-name: github.com/getoutreach/governance
-      - dependency-name: github.com/getoutreach/stencil
       - dependency-name: github.com/getoutreach/services
+      - dependency-name: github.com/getoutreach/fflags
+      - dependency-name: github.com/getoutreach/stencil
+      - dependency-name: github.com/getoutreach/governance
       ## <<Stencil::Block(dependabotGoIgnore)>>
 
       ## <</Stencil::Block>>
