@@ -86,11 +86,13 @@ workflows:
                 - main
     jobs:
       - shared/save_cache: *test
+      - shared/save_e2e_cache: *test
 
   manual-rebuild-cache:
     when: << pipeline.parameters.rebuild_cache >>
     jobs:
       - shared/save_cache: *test
+      - shared/save_e2e_cache: *test
 
   auto-release-rc:
     triggers:

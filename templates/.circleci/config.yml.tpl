@@ -138,11 +138,17 @@ workflows:
                 - {{ $defaultBranch }}
     jobs:
       - shared/save_cache: *test
+{{- if not (stencil.Arg "ciOptions.skipE2e") }}
+      - shared/save_e2e_cache: *test
+{{- end }}
 
   manual-rebuild-cache:
     when: << pipeline.parameters.rebuild_cache >>
     jobs:
       - shared/save_cache: *test
+{{- if not (stencil.Arg "ciOptions.skipE2e") }}
+      - shared/save_e2e_cache: *test
+{{- end }}
   {{- if and (stencil.Arg "releaseOptions.enablePrereleases") (stencil.Arg "releaseOptions.autoPrereleases") }}
 
   auto-release-rc:
