@@ -48,9 +48,9 @@ go mod tidy # Ensure your go.mod and go.sum files are up to date.
   3. If a file is not listed here, the owner is current repository
 * docs/: Directory used to store documentation files and reference materials for the project.
 * `templates/`: Templates for generating project files, such as `AGENTS.md.tpl` for the AGENTS.md file. Used in stencil-modules to define the structure and content of generated files.
-* `templates/`: Templates for generating project files, such as `AGENTS.md.tpl` for the AGENTS.md file. Used in stencil-modules to define the structure and content of generated files.
 * `scripts/`: internal development shell scripts _(**deprecated**, prefer to use `mise` tasks when appropriate)_
 * `.vscode/`: VSCode configuration files
+* `.circleci/`: CircleCI configuration files.
 
 <!-- <<Stencil::Block(directoryStructureCustom)>> -->
 

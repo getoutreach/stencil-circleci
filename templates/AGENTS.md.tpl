@@ -1,7 +1,7 @@
 {{- file.Skip "Virtual file for AGENTS.md module hooks" }}
 
 {{- define "circleciDirectoryStructure" }}
-* `templates/`: Templates for generating project files, such as `AGENTS.md.tpl` for the AGENTS.md file. Used in stencil-modules to define the structure and content of generated files.
+* `.circleci/`: CircleCI configuration files.
 {{- end }}
 
 {{ stencil.AddToModuleHook "github.com/getoutreach/stencil-base" "agentsDirectoryStructure" (list (stencil.ApplyTemplate "circleciDirectoryStructure")) }}
