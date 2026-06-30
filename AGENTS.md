@@ -93,8 +93,6 @@ If you need more context, you can find more information in `docs/` directory. If
 - Follow idiomatic Go error handling (return errors, don't panic)
 - Use structured logging (e.g., log.WithError(err).Error(...)) instead of fmt.Printf
 - Add context to errors using `fmt.Errorf("...: %w", err)`
-
-
 <!-- <<Stencil::Block(agentsBoundariesAlwaysCustom)>> -->
 
 <!-- <</Stencil::Block>> -->
@@ -108,8 +106,6 @@ If you need more context, you can find more information in `docs/` directory. If
 - Before bumping major versions of dependencies
 - Before changing database schema or migration files // maybe different module?
 - Before modifying CI/CD pipeline configuration (.github/, .circleci/, etc.)
-
-
 <!-- <<Stencil::Block(agentsBoundariesAskCustom)>> -->
 
 <!-- <</Stencil::Block>> -->
@@ -122,14 +118,11 @@ If you need more context, you can find more information in `docs/` directory. If
 - Ignore or swallow errors silently (e.g., _ = someFunc() without justification)
 - Add TODO or FIXME comments without a linked issue or explanation
 - Use `panic()` in production code paths
-
-
 <!-- <<Stencil::Block(agentsBoundariesNeverCustom)>> -->
 
 <!-- <</Stencil::Block>> -->
 
 ## Other
-
 <!-- <<Stencil::Block(agentsOtherCustom)>> -->
 
 <!-- <</Stencil::Block>> -->
