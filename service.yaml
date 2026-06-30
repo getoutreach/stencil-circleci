@@ -36,7 +36,7 @@ modules:
     channel: rc
 replacements:
   github.com/getoutreach/stencil-circleci: ./
-  github.com/getoutreach/stencil-base: ./stencil-base
+  github.com/getoutreach/stencil-base: ../stencil-base
   github.com/getoutreach/stencil-outreach: ../stencil-outreach
   github.com/getoutreach/stencil-golang: ../stencil-golang
   github.com/getoutreach/stencil-template-base: ../stencil-template-base
