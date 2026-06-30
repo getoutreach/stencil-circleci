@@ -37,8 +37,6 @@ go mod tidy # Ensure your go.mod and go.sum files are up to date.
 # <</Stencil::Block>>
 ```
 
-
-
 ## Directory structure
 
 * service.yaml: File used as configuration for `stencil` program containing additional arguments and stencil modules to use
@@ -67,15 +65,6 @@ If you need more context, you can find more information in `docs/` directory. If
 | Internal Go idioms | [webpage](https://outreach-io.atlassian.net/wiki/spaces/EN/pages/1124335785/Go+idioms) |
 | Idiomatic Go practices | [webpage](https://dmitri.shuralyov.com/idiomatic-go) |
 <!-- <<Stencil::Block(referencesTableCustom)>> -->
-
-<!-- <</Stencil::Block>> -->
-
-<!--- -->
-<!--- * Run `make fmt` to format project. -->
-<!--- * Run `make lint` to run linters on project's code. -->
-
-
-<!-- <<Stencil::Block(agentsReferencesCustom)>> -->
 
 <!-- <</Stencil::Block>> -->
 
