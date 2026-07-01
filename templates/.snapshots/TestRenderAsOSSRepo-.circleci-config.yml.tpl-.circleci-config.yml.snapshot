@@ -29,6 +29,7 @@ contexts: &contexts
   - circleci-credentials
   - tray-webhooks
   - wizcli
+  - datadog
   ## <<Stencil::Block(extraContexts)>>
   
   ## <</Stencil::Block>>
@@ -117,6 +118,7 @@ workflows:
           context: *contexts
           executor_name: oss-docker
           docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
+          docker_tag: latest
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 
           ## <</Stencil::Block>>
@@ -132,6 +134,7 @@ workflows:
           <<: *test
           executor_name: oss-docker
           docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
+          docker_tag: latest
           ## <<Stencil::Block(circleSharedTestExtra)>>
 
           ## <</Stencil::Block>>

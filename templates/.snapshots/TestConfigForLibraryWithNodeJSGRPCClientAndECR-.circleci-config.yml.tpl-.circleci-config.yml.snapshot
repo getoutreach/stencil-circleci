@@ -29,6 +29,7 @@ contexts: &contexts
   - circleci-credentials
   - tray-webhooks
   - wizcli
+  - datadog
   ## <<Stencil::Block(extraContexts)>>
   
   ## <</Stencil::Block>>
