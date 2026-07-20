@@ -308,6 +308,11 @@ workflows:
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
           context: *contexts
+          requires:
+            - shared/test
+            ## <<Stencil::Block(circleE2ERequires)>>
+{{ file.Block "circleE2ERequires" }}
+            ## <</Stencil::Block>>
           ## <<Stencil::Block(circleE2EExtra)>>
 {{ file.Block "circleE2EExtra" }}
           ## <</Stencil::Block>>
