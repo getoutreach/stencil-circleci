@@ -2,4 +2,6 @@
 #
 #MISE description="Ensures that the shared orb is updated in test snapshots"
 
-SKIP_VALIDATE=true make test
+# If the test snapshots need updating, the tests will fail, this is
+# fine. If we get off of stenciltest this will no longer be needed.
+SKIP_VALIDATE=true make test || true
