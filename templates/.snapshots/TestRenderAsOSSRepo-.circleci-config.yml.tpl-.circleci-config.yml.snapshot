@@ -146,6 +146,11 @@ workflows:
               only: /v\d+(\.\d+)*(-.*)*/
       - shared/e2e:
           context: *contexts
+          requires:
+            - shared/test
+            ## <<Stencil::Block(circleE2ERequires)>>
+
+            ## <</Stencil::Block>>
           ## <<Stencil::Block(circleE2EExtra)>>
 
           ## <</Stencil::Block>>
