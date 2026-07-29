@@ -8,20 +8,21 @@ modules:
 stencilVersion: "^v1.43.0-rc.5"
 arguments:
   ciOptions.skipDocker:
-    description: Disables the docker ci pipeline
+    description: Disables the image generation CI pipeline.
     schema:
       type: boolean
   ciOptions.skipE2e:
-    description: Disables the e2e CI pipeline
+    description: Disables the E2E CI pipeline.
     schema:
       type: boolean
   coverage.provider:
-    description: The platform to use for coverage reporting
+    description: The platform to use for coverage reporting.
     schema:
       type: string
       enum:
         - codecov
         - coveralls
+        - coverbot
   grpcClients:
     schema:
       type: array
@@ -31,17 +32,13 @@ arguments:
   notifications.slackChannel:
     schema:
       type: string
-    description: The slack channel notify for build and release failures.
+    description: The Slack channel used to notify for build and release failures.
   oss:
-    schema:
-      type: boolean
-    description: See stencil-base
+    from: github.com/getoutreach/stencil-base
   releaseOptions.enablePrereleases:
-    description: Enables pre-releasing via semantic-release
-    schema:
-      type: boolean
+    from: github.com/getoutreach/stencil-base
   releaseOptions.prereleasesBranch:
-    description: See stencil-base
+    from: github.com/getoutreach/stencil-base
   releaseOptions.autoPrereleases:
     description: Whether to automate creating pre-releases via CircleCI.
     schema:
@@ -63,15 +60,9 @@ arguments:
     schema:
       type: boolean
   service:
-    description: Is this a service or not
-    schema:
-      type: boolean
+    from: github.com/getoutreach/stencil-base
   serviceActivities:
-    description: List of service activities to enable
-    schema:
-      type: array
-      items:
-        type: string
+    from: github.com/getoutreach/stencil-base
   versions.devbase:
     description: Version of devbase to use for the 'getoutreach/shared' orb.
     schema:
