@@ -25,35 +25,6 @@ Indicates that this application is a service and that docker images should be bu
 service: true
 ```
 
-## `serviceActivities`
-
-**Type**: `list`
-**Default**: `[]`
-**Options**: `['grpc', 'http', 'kafka']`
-
-A list of service activities that should be generated. Requires `service` to be set to `true`.
-
-```yaml
-serviceActivities:
-  - grpc
-  - http
-  - kafka
-```
-
-## `grpcClients`
-
-**Type**: `list`
-**Default**: `[]`
-**Options**: `['node', 'ruby']`
-
-A list of gRPC clients to run tests for.
-
-```yaml
-grpcClients:
-  - node
-  - ruby
-```
-
 ## `ciOptions.skipDocker`
 
 Disables the `shared/docker` step in the CircleCI pipeline from running

@@ -23,12 +23,6 @@ arguments:
         - codecov
         - coveralls
         - coverbot
-  grpcClients:
-    schema:
-      type: array
-      items:
-        type: string
-    description: gRPC clients to generate. Used to run tests on gRPC clients.
   notifications.slackChannel:
     schema:
       type: string
@@ -60,8 +54,6 @@ arguments:
     schema:
       type: boolean
   service:
-    from: github.com/getoutreach/stencil-base
-  serviceActivities:
     from: github.com/getoutreach/stencil-base
   versions.devbase:
     description: Version of devbase to use for the 'getoutreach/shared' orb.
