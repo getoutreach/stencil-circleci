@@ -108,36 +108,6 @@ func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
 	st.Run(stenciltest.RegenerateSnapshots())
 }
 
-func TestConfigForLibraryWithNodeJSGRPCClient(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"grpcClients": []any{
-			"node",
-		},
-		"service": false,
-		"versions": map[string]any{
-			"devbase": "my-custom-version",
-		},
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
-}
-
-func TestConfigForLibraryWithNodeJSGRPCClientAndECR(t *testing.T) {
-	fakeECRPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"grpcClients": []any{
-			"node",
-		},
-		"service": false,
-		"versions": map[string]any{
-			"devbase": "my-custom-version",
-		},
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
-}
-
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")

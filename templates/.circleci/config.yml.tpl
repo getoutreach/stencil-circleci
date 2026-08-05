@@ -3,7 +3,6 @@
 version: 2.1
 {{- $prereleases := stencil.Arg "releaseOptions.enablePrereleases" }}
 {{- $prereleaseBranch := stencil.Arg "releaseOptions.prereleasesBranch" }}
-{{- $testNodeClient := and (or (not (stencil.Arg "service")) (has "grpc" (stencil.Arg "serviceActivities"))) (has "node" (stencil.Arg "grpcClients")) }}
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
 {{- $executorName := "" }}
@@ -207,25 +206,10 @@ workflows:
 {{ toYaml (list .) | indent 6 }}
       {{- end }}
       ### End jobs inserted by other modules
-      {{- if $testNodeClient }}
-      - shared/test_node_client:
-          context: *contexts
-          {{- if not (stencil.Arg "oss") }}
-          executor_name: {{ $executorName }}
-          {{- end }}
-          steps:
-            ## <<Stencil::Block(testNodeClientSteps)>>
-{{ file.Block "testNodeClientSteps" | default "[]" | fromYaml | toYaml | indent 12 }}
-            ## <</Stencil::Block>>
-          requires:
-            ## <<Stencil::Block(testNodeRequires)>>
-{{ file.Block "testNodeRequires" | default "[]" | fromYaml | toYaml | indent 12 }}
-            ## <</Stencil::Block>>
-      {{- end }}
       - shared/release: &release
           dryrun: false
-          {{- if $testNodeClient }}
-          node_client: true
+          {{- range stencil.GetModuleHook "workflows.release.release.params" }}
+          {{ . | indent 10 }}
           {{- end }}
           context: *contexts
           {{- if $releaseFailureSlackChannel }}
@@ -239,9 +223,9 @@ workflows:
 {{ file.Block "circleReleaseRequires" }}
             ## <</Stencil::Block>>
             - shared/test
-        {{- if $testNodeClient }}
-            - shared/test_node_client
-        {{- end }}
+            {{- range stencil.GetModuleHook "workflows.release.release.requires" }}
+            - {{ . }}
+            {{- end }}
           filters:
             branches:
               only: {{ $stableBranch }}
