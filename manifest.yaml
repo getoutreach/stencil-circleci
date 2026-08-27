@@ -29,6 +29,8 @@ arguments:
     description: The Slack channel used to notify for build and release failures.
   oss:
     from: github.com/getoutreach/stencil-base
+  releaseOptions.enabled:
+    from: github.com/getoutreach/stencil-base
   releaseOptions.enablePrereleases:
     from: github.com/getoutreach/stencil-base
   releaseOptions.prereleasesBranch:

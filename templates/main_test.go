@@ -71,6 +71,23 @@ func TestConfigForAutoPrerelease(t *testing.T) {
 	st.Run(stenciltest.RegenerateSnapshots())
 }
 
+func TestConfigForDisabledReleases(t *testing.T) {
+	fakeDockerPullRegistry(t)
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	setTestArgs(st, map[string]any{
+		"releaseOptions": map[string]any{
+			"enabled": false,
+		},
+	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
 func TestConfigForDisabledPrerelease(t *testing.T) {
 	fakeDockerPullRegistry(t)
 	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
