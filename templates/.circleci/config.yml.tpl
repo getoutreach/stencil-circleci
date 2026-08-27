@@ -206,6 +206,7 @@ workflows:
 {{ toYaml (list .) | indent 6 }}
       {{- end }}
       ### End jobs inserted by other modules
+      {{- if stencil.Arg "releaseOptions.enabled" }}
       - shared/release: &release
           dryrun: false
           {{- range stencil.GetModuleHook "workflows.release.release.params" }}
@@ -269,6 +270,7 @@ workflows:
           filters:
             branches:
               ignore: *release_branches
+      {{- end }}{{/* releaseOptions.enabled */}}
       - shared/test:
           <<: *test
           {{- if stencil.Arg "oss" }}
