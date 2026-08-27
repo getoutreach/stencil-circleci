@@ -39,6 +39,10 @@ parameters:
 # Extra contexts to expose to all jobs below
 contexts: &contexts
 {{- $userContexts := (file.Block "extraContexts" | fromYaml) }}
+{{- if not (kindIs "slice" $userContexts) }}
+  {{- /* extraContexts is hand-edited text, so unlike $contexts below, "default (list)" alone can't be trusted to catch a malformed (non-list) value; coerce outright so has() never panics on it */}}
+  {{- $userContexts = list }}
+{{- end }}
 {{- $contexts := (stencil.ApplyTemplate "contexts" | fromYaml | default (list) | uniq) }}
 {{- if $contexts }}
   {{- /* If we have user contexts, ensure that we don't duplicate builtin ones */}}
