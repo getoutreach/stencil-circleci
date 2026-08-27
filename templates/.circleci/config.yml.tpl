@@ -42,7 +42,6 @@ contexts: &contexts
 {{- if and (not (eq $userContexts nil)) (not (kindIs "slice" $userContexts)) }}
   {{- fail "extraContexts must be a list of extra contexts" }}
 {{- end }}
-{{- $userContexts = $userContexts | default (list) }}
 {{- $contexts := (stencil.ApplyTemplate "contexts" | fromYaml | default (list) | uniq) }}
 {{- if $contexts }}
   {{- /* If we have user contexts, ensure that we don't duplicate builtin ones */}}
