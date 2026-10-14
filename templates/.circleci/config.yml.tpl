@@ -31,6 +31,27 @@ parameters:
     type: boolean
     default: false
   {{- end }}
+  {{- /* []map[string]interface{}: pipeline parameter name -> CircleCI parameter definition */}}
+  {{- $moduleParams := dict }}
+  {{- range (stencil.GetModuleHook "pipeline.parameters") }}
+    {{- range $name, $definition := . }}
+      {{- if or (hasKey $moduleParams $name) (has $name (list "rebuild_cache" "release_rc")) }}
+        {{- fail (printf "pipeline.parameters hook: duplicate pipeline parameter %q" $name) }}
+      {{- end }}
+      {{- if not (has (get $definition "type") (list "boolean" "string" "integer" "enum")) }}
+        {{- fail (printf "pipeline.parameters hook: parameter %q has type %v; must be boolean, string, integer or enum" $name (get $definition "type")) }}
+      {{- end }}
+      {{- if not (hasKey $definition "default") }}
+        {{- fail (printf "pipeline.parameters hook: parameter %q needs a default" $name) }}
+      {{- end }}
+      {{- $_ := set $moduleParams $name $definition }}
+    {{- end }}
+  {{- end }}
+  {{- if $moduleParams }}
+  ### Start pipeline parameters inserted by other modules
+{{ toYaml $moduleParams | indent 2 }}
+  ### End pipeline parameters inserted by other modules
+  {{- end }}
   ## <<Stencil::Block(CircleCIExtraParams)>>
 {{ file.Block "CircleCIExtraParams" }}
   ## <</Stencil::Block>>
@@ -197,6 +218,10 @@ workflows:
         - not: << pipeline.parameters.rebuild_cache >>
         {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
         - not: << pipeline.parameters.release_rc >>
+        {{- end }}
+        {{- /* []string: conditions that, when true, skip the release workflow */}}
+        {{- range (stencil.GetModuleHook "workflows.release.when.not" | uniq) }}
+        - not: {{ . }}
         {{- end }}
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
