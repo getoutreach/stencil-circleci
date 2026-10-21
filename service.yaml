@@ -3,20 +3,19 @@ arguments:
   ciOptions:
     skipDocker: true
     skipE2e: true
+  confluenceSpaceKey: DT
   description: Stencil Module for CircleCI
+  lifecycle: public_ga
   lintroller: platinum
   notifications:
     slackChannel: "#dt-notifications"
-  opslevel:
-    confluenceSpaceKey: DT
-    lifecycle: public_ga
-    tier: 2
   releaseOptions:
     allowMajorVersions: true
     autoPrereleases: true
     enablePrereleases: true
     prereleasesBranch: main
   reportingTeam: fnd-dt
+  tier: 2
 modules:
   - name: github.com/getoutreach/stencil-template-base
     channel: rc
