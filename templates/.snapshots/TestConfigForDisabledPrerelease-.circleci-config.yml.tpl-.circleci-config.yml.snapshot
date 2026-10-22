@@ -154,6 +154,9 @@ workflows:
           ## <</Stencil::Block>>
       - shared/docker_stitch:
           context: *contexts
+          ## <<Stencil::Block(circleDockerStitchExtra)>>
+
+          ## <</Stencil::Block>>
           requires:
             - shared/docker_amd64
             - shared/docker_arm64
@@ -164,6 +167,9 @@ workflows:
               only: /v\d+(\.\d+)*(-.*)*/
       - shared/docker_amd64:
           context: *contexts
+          ## <<Stencil::Block(circleDockerAMD64Extra)>>
+
+          ## <</Stencil::Block>>
           filters:
             branches:
               ignore: *release_branches
@@ -171,6 +177,9 @@ workflows:
               only: /v\d+(\.\d+)*(-.*)*/
       - shared/docker_arm64:
           context: *contexts
+          ## <<Stencil::Block(circleDockerArm64Extra)>>
+
+          ## <</Stencil::Block>>
           filters:
             branches:
               ignore: *release_branches
