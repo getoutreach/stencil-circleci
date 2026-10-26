@@ -296,7 +296,16 @@ workflows:
               only: /v\d+(\.\d+)*(-.*)*/
       {{- if not (stencil.Arg "ciOptions.skipE2e") }}
       - shared/e2e:
+          {{- $e2eExtraContexts := (stencil.Arg "ciOptions.e2eExtraContexts" | default (list)) }}
+          {{- if $e2eExtraContexts }}
+          {{- /* YAML can't extend an alias, so list every context explicitly. */}}
+          context:
+            {{- range (concat $contexts ($userContexts | default (list)) $e2eExtraContexts | uniq) }}
+            - {{ . }}
+            {{- end }}
+          {{- else }}
           context: *contexts
+          {{- end }}
           requires:
             - shared/test
             ## <<Stencil::Block(circleE2ERequires)>>
