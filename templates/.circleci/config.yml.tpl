@@ -13,7 +13,6 @@ version: 2.1
 {{- end }}
 orbs:
   shared: getoutreach/shared@{{ stencil.Arg "versions.devbase" | default (stencil.ApplyTemplate "devbase.orb_version") }}
-  queue: eddiewebb/queue@2.2.1
   {{- $orbsHook := (stencil.GetModuleHook "orbs") }}
   {{- range $orbsHook }}
 {{ toYaml . | indent 2 }}
