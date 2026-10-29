@@ -3,7 +3,6 @@
 version: 2.1
 orbs:
   shared: getoutreach/shared@9.99.0
-  queue: eddiewebb/queue@2.2.1
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
   ## <</Stencil::Block>>
