@@ -158,3 +158,30 @@ func TestRenderAsOSSRepo(t *testing.T) {
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
+
+func TestRenderRerunE2EWorkflow(t *testing.T) {
+	st := stenciltest.New(t, ".github/workflows/rerun-e2e.yaml.tpl")
+	setTestArgs(st, nil)
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
+// stenciltest snapshots skipped files too, so the skipped cases below
+// snapshot only the "<nil>" that file.Skip returns.
+
+func TestRenderRerunE2EWorkflowWithSkipE2e(t *testing.T) {
+	st := stenciltest.New(t, ".github/workflows/rerun-e2e.yaml.tpl")
+	setTestArgs(st, map[string]any{
+		"ciOptions": map[string]any{
+			"skipE2e": true,
+		},
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
+
+func TestRenderRerunE2EWorkflowAsOSSRepo(t *testing.T) {
+	st := stenciltest.New(t, ".github/workflows/rerun-e2e.yaml.tpl")
+	setTestArgs(st, map[string]any{
+		"oss": true,
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
