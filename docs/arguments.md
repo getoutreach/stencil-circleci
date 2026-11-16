@@ -13,7 +13,7 @@ ciOptions:
 
 ## `ciOptions.skipE2e`
 
-Disables the `shared/e2e` step in the CircleCI pipeline from running
+Disables the `shared/e2e` step in the CircleCI pipeline from running, and skips rendering the `.github/workflows/rerun-e2e.yaml` GitHub Actions workflow
 
 ```yaml
 ciOptions:
