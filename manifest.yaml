@@ -57,6 +57,24 @@ arguments:
       type: boolean
   service:
     from: github.com/getoutreach/stencil-base
+  stencilUpgrade.scheduled:
+    description: >-
+      Adds a CircleCI workflow that upgrades the stencil modules on a schedule. This controls
+      only the scheduled job; running stencil by hand is unaffected.
+    schema:
+      type: boolean
+  stencilUpgrade.cron:
+    description: >-
+      When the scheduled stencil-upgrade job will be run, using cron syntax, in UTC, if
+      stencilUpgrade.scheduled is true. Defaults to a time on Thursday derived from the service name.
+    schema:
+      type: string
+  stencilUpgrade.forcePR:
+    description: >-
+      Passes force_pr to the stencil-upgrade job, if stencilUpgrade.scheduled is true.
+    schema:
+      type: boolean
+      default: false
   versions.devbase:
     description: Version of devbase to use for the 'getoutreach/shared' orb.
     schema:

@@ -5,6 +5,7 @@ version: 2.1
 {{- $prereleaseBranch := stencil.Arg "releaseOptions.prereleasesBranch" }}
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
+{{- $stencilUpgrade := stencil.Arg "stencilUpgrade.scheduled" }}
 {{- $executorName := "" }}
 {{- if contains "amazonaws.com" .Runtime.Box.Docker.ImagePullRegistry }}
 {{- $executorName = "testbed-docker-aws" }}
@@ -27,6 +28,11 @@ parameters:
     default: false
   {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
   release_rc:
+    type: boolean
+    default: false
+  {{- end }}
+  {{- if $stencilUpgrade }}
+  stencil_upgrade:
     type: boolean
     default: false
   {{- end }}
@@ -190,12 +196,36 @@ workflows:
           ## <</Stencil::Block>>
   {{- end }}
 
+  {{- if $stencilUpgrade }}
+
+  stencil-upgrade:
+    triggers:
+      - schedule:
+          cron: {{ stencil.Arg "stencilUpgrade.cron" | default (stencil.ApplyTemplate "stencilUpgradeCron" .Config.Name) | quote }}
+          filters:
+            branches:
+              only:
+                - {{ $defaultBranch }}
+    jobs:
+      - shared/stencil_upgrade: &stencil_upgrade
+          context: *contexts
+          force_pr: {{ stencil.Arg "stencilUpgrade.forcePR" | default false }}
+
+  manual-stencil-upgrade:
+    when: << pipeline.parameters.stencil_upgrade >>
+    jobs:
+      - shared/stencil_upgrade: *stencil_upgrade
+  {{- end }}
+
   release:
     when:
       and:
         - not: << pipeline.parameters.rebuild_cache >>
         {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
         - not: << pipeline.parameters.release_rc >>
+        {{- end }}
+        {{- if $stencilUpgrade }}
+        - not: << pipeline.parameters.stencil_upgrade >>
         {{- end }}
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>

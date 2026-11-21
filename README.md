@@ -18,4 +18,11 @@ Please read the [CONTRIBUTING.md](CONTRIBUTING.md) document for guidelines on de
 
 For usage documentation, see the [docs/](docs/) directory.
 
+### Scheduled stencil upgrades
+
+Set `stencilUpgrade.scheduled: true` to add a `stencil-upgrade` workflow that runs the `shared/stencil_upgrade` job on a schedule. This argument controls only the scheduled job; running `stencil` by hand is unaffected. Set the `stencil_upgrade` pipeline parameter to `true` to run the job on demand.
+
+- `stencilUpgrade.cron`: when the job runs, using cron syntax, in UTC. The default is a time on Thursday between 08:00 and 19:59 UTC, derived from the service name.
+- `stencilUpgrade.forcePR`: passed to the job as `force_pr`. Defaults to `false`.
+
 <!-- <</Stencil::Block>> -->

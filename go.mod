@@ -4,7 +4,10 @@ module github.com/getoutreach/stencil-circleci
 
 go 1.27.4
 
-require github.com/getoutreach/stencil v1.47.0
+require (
+	github.com/Masterminds/sprig/v3 v3.3.0
+	github.com/getoutreach/stencil v1.47.0
+)
 
 require (
 	charm.land/bubbles/v2 v2.2.1 // indirect
@@ -14,7 +17,6 @@ require (
 	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
-	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/Microsoft/go-winio v0.6.4 // indirect
 	github.com/ProtonMail/go-crypto v1.5.2 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect

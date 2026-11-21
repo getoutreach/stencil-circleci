@@ -2,6 +2,9 @@ package main
 
 import (
 	"maps"
+	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/getoutreach/stencil/pkg/configuration"
@@ -157,4 +160,66 @@ func TestRenderAsOSSRepo(t *testing.T) {
 		Version: "v9.99.0",
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
+}
+
+// newStencilUpgradeTest returns a config test with the given stencilUpgrade
+// arguments. The harness always names the service "testing".
+func newStencilUpgradeTest(t *testing.T, stencilUpgrade map[string]any) *stenciltest.Template {
+	t.Helper()
+	fakeDockerPullRegistry(t)
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl", "_stencil_upgrade.tpl")
+	args := map[string]any{}
+	if stencilUpgrade != nil {
+		args["stencilUpgrade"] = stencilUpgrade
+	}
+	setTestArgs(st, args)
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
+	})
+	return st
+}
+
+// readSnapshot returns the contents of the config snapshot of the given test.
+func readSnapshot(t *testing.T, testName string) string {
+	t.Helper()
+	b, err := os.ReadFile(filepath.Join(".snapshots", testName+"-.circleci-config.yml.tpl-.circleci-config.yml.snapshot"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(b)
+}
+
+func TestStencilUpgradeDisabled(t *testing.T) {
+	newStencilUpgradeTest(t, nil).Run(stenciltest.RegenerateSnapshots())
+	if snapshot := readSnapshot(t, t.Name()); strings.Contains(snapshot, "stencil-upgrade") || strings.Contains(snapshot, "stencil_upgrade") {
+		t.Error("snapshot has stencil-upgrade config, but stencilUpgrade.scheduled is not set")
+	}
+}
+
+func TestStencilUpgradeEnabled(t *testing.T) {
+	newStencilUpgradeTest(t, map[string]any{"scheduled": true}).Run(stenciltest.RegenerateSnapshots())
+	snapshot := readSnapshot(t, t.Name())
+	// stencilUpgradeCron for the service name "testing".
+	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:", "force_pr: false"} {
+		if !strings.Contains(snapshot, want) {
+			t.Errorf("snapshot does not contain %q", want)
+		}
+	}
+}
+
+func TestStencilUpgradeCronOverride(t *testing.T) {
+	newStencilUpgradeTest(t, map[string]any{"scheduled": true, "cron": "0 5 * * 1"}).Run(stenciltest.RegenerateSnapshots())
+	if snapshot := readSnapshot(t, t.Name()); !strings.Contains(snapshot, `cron: "0 5 * * 1"`) {
+		t.Error("snapshot does not contain the stencilUpgrade.cron value")
+	}
+}
+
+func TestStencilUpgradeForcePR(t *testing.T) {
+	newStencilUpgradeTest(t, map[string]any{"scheduled": true, "forcePR": true}).Run(stenciltest.RegenerateSnapshots())
+	if snapshot := readSnapshot(t, t.Name()); !strings.Contains(snapshot, "force_pr: true") {
+		t.Error("snapshot does not contain force_pr: true")
+	}
 }
