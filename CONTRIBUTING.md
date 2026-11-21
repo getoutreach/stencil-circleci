@@ -16,16 +16,6 @@ This project uses devbase, which exposes the following build tooling: [devbase/d
 
 <!-- <<Stencil::Block(customBuildingAndTesting)>> -->
 
-The template tests in `templates/` use `rendertest`. Unlike the text under "Linting and Unit Testing"
-below, `make test` does not update the snapshots in `templates/testdata/snapshots`. It only compares
-the rendered files with them. To update the snapshots, run:
-
-```bash
-go test -tags rendertest_update_snapshots ./templates/...
-```
-
-Review the changed snapshots and commit them with your change.
-
 <!-- <</Stencil::Block>> -->
 
 ### Replacing a Remote Version of the a Package with Local Version
