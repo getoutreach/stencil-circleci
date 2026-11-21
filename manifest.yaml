@@ -7,6 +7,12 @@ modules:
     version: ">=v0.17.0"
 stencilVersion: "^v1.43.0-rc.5"
 arguments:
+  ciOptions.e2eExtraContexts:
+    description: Extra CircleCI contexts to add to the E2E job only, on top of the contexts shared by all jobs.
+    schema:
+      type: array
+      items:
+        type: string
   ciOptions.skipDocker:
     description: Disables the image generation CI pipeline.
     schema:

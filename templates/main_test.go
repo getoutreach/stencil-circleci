@@ -158,3 +158,20 @@ func TestRenderAsOSSRepo(t *testing.T) {
 	})
 	st.Run(stenciltest.RegenerateSnapshots())
 }
+
+func TestRenderWithE2EExtraContexts(t *testing.T) {
+	fakeDockerPullRegistry(t)
+	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
+	setTestArgs(st, map[string]any{
+		"ciOptions": map[string]any{
+			"e2eExtraContexts": []any{"github-credentials"},
+		},
+	})
+	// We don't actually need any templates from devbase, so using a
+	// fake version works here.
+	st.AddModule(&configuration.TemplateRepository{
+		Name:    "github.com/getoutreach/devbase",
+		Version: "v9.99.0",
+	})
+	st.Run(stenciltest.RegenerateSnapshots())
+}
