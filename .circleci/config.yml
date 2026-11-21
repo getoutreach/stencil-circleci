@@ -57,21 +57,9 @@ release_branches: &release_branches # Release branch
 ## <</Stencil::Block>>
 
 jobs:
+  {}
   ## <<Stencil::Block(circleJobs)>>
-  render:
-    executor:
-      name: shared/testbed-docker-aws
-      docker_tag: latest
-    steps:
-      - shared/setup_environment
-      - run:
-          name: Install Stencil
-          command: ./.circleci/scripts/download-stencil.sh
-          environment:
-            STENCIL_USE_PRERELEASE: true
-      - run:
-          name: Render Files
-          command: ./.circleci/scripts/render.sh
+
   ## <</Stencil::Block>>
 
   ### Start jobs inserted by other modules
@@ -135,8 +123,7 @@ workflows:
         - not: << pipeline.parameters.release_rc >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
-      - render:
-          context: *contexts
+
       ## <</Stencil::Block>>
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
@@ -149,7 +136,6 @@ workflows:
           ## <</Stencil::Block>>
           requires:
             ## <<Stencil::Block(circleReleaseRequires)>>
-            - render
 
             ## <</Stencil::Block>>
             - shared/test
