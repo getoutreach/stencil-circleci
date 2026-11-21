@@ -2,6 +2,8 @@ package main
 
 import (
 	"os"
+	"os/exec"
+	"path/filepath"
 	"testing"
 
 	"github.com/getoutreach/gobox/pkg/box"
@@ -56,12 +58,45 @@ func newConfigTemplate(args ...rendertest.ArgOption) *rendertest.TemplateBuilder
 		WithArgs(args...)
 }
 
-// render renders the CircleCI config template with the given arguments, and
-// compares the config with its snapshot.
+// render renders the CircleCI config template with the given arguments,
+// compares the config with its snapshot, and validates it with the CircleCI CLI.
+// The validation is a subtest, so a missing CLI skips only the validation.
 func render(t *testing.T, args ...rendertest.ArgOption) {
 	t.Helper()
 
-	newConfigTemplate(args...).Run(t).Snapshot(t)
+	result := newConfigTemplate(args...).Run(t)
+	result.Snapshot(t)
+	t.Run("circleci config validate", func(t *testing.T) {
+		validateConfig(t, result)
+	})
+}
+
+// validateConfig checks that the CircleCI CLI accepts the rendered config. The
+// config has no jobs or hook values from other modules, because the tests
+// render only the templates of this module.
+//
+// It needs the circleci CLI, and credentials to resolve the shared orb. Without
+// the CLI, it fails the test in CI and skips it elsewhere.
+func validateConfig(t *testing.T, result *rendertest.Result) {
+	t.Helper()
+
+	cli, err := exec.LookPath("circleci")
+	if err != nil {
+		if os.Getenv("CI") != "" {
+			t.Fatalf("the circleci CLI is required in CI: %v", err)
+		}
+		t.Skipf("the circleci CLI is not installed: %v", err)
+	}
+
+	path := filepath.Join(t.TempDir(), "config.yml")
+	if err := os.WriteFile(path, result.File(".circleci/config.yml").Contents(), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	out, err := exec.CommandContext(t.Context(), cli, "config", "validate", path).CombinedOutput()
+	if err != nil {
+		t.Fatalf("circleci config validate failed: %v\n%s", err, out)
+	}
 }
 
 // prereleaseArgs enables prereleases from the given branch.
@@ -121,7 +156,9 @@ func TestRenderWithSkipE2eAndDocker(t *testing.T) {
 
 	render(t,
 		prereleaseArgs("main"),
-		rendertest.NestedArg("versions.devbase", "my-custom-version"),
+		// A released version of the shared orb, because the CircleCI CLI
+		// validates that the orb version exists.
+		rendertest.NestedArg("versions.devbase", "2.39.1"),
 		rendertest.NestedArg("ciOptions.skipE2e", true),
 		rendertest.NestedArg("ciOptions.skipDocker", true),
 	)
