@@ -3,5 +3,6 @@
 *.md
 
 ## <<Stencil::Block(prettierignoreExtras)>>
-
+# rendertest compares snapshots byte for byte with the rendered files.
+templates/testdata/snapshots
 ## <</Stencil::Block>>

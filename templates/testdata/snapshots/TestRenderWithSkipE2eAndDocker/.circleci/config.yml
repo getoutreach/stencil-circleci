@@ -1,14 +1,17 @@
-(*codegen.File)(# Please re-run stencil after any changes to this file as invalid
+# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@9.99.0
+  shared: getoutreach/shared@my-custom-version
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
   ## <</Stencil::Block>>
 
 parameters:
   rebuild_cache:
+    type: boolean
+    default: false
+  release_rc:
     type: boolean
     default: false
   ## <<Stencil::Block(CircleCIExtraParams)>>
@@ -47,6 +50,9 @@ test: &test
 
 # Branches used for releasing code, pre-release or not
 release_branches: &release_branches
+  # Release branch
+  - "release"
+  # Pre-releases branch
   - "main"
 
 ## <<Stencil::Block(circleAnchorExtra)>>
@@ -80,18 +86,26 @@ workflows:
                 - main
     jobs:
       - shared/save_cache: *test
-      - shared/save_e2e_cache: *test
 
   manual-rebuild-cache:
     when: << pipeline.parameters.rebuild_cache >>
     jobs:
       - shared/save_cache: *test
-      - shared/save_e2e_cache: *test
+
+  manual-release-rc:
+    when: << pipeline.parameters.release_rc>>
+    jobs:
+      - shared/trigger_rc_release:
+          context: *contexts
+          ## <<Stencil::Block(circleManualTriggerRCExtra)>>
+
+          ## <</Stencil::Block>>
 
   release:
     when:
       and:
         - not: << pipeline.parameters.rebuild_cache >>
+        - not: << pipeline.parameters.release_rc >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 
@@ -111,7 +125,22 @@ workflows:
             - shared/test
           filters:
             branches:
-              only: main
+              only: release
+      - shared/pre-release: &pre-release
+          dryrun: false
+          context: *contexts
+          ## <<Stencil::Block(circlePreReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circlePreReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
+          filters:
+            branches:
+              only:
+                - main
       # Dryrun for PRs
       - shared/pre-release: &pre-release
           dryrun: true
@@ -141,47 +170,3 @@ workflows:
                 - main
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
-      - shared/e2e:
-          context: *contexts
-          requires:
-            - shared/test
-            ## <<Stencil::Block(circleE2ERequires)>>
-
-            ## <</Stencil::Block>>
-          ## <<Stencil::Block(circleE2EExtra)>>
-
-          ## <</Stencil::Block>>
-      - shared/docker_stitch:
-          context: *contexts
-          ## <<Stencil::Block(circleDockerStitchExtra)>>
-
-          ## <</Stencil::Block>>
-          requires:
-            - shared/docker_amd64
-            - shared/docker_arm64
-          filters:
-            branches:
-              ignore: *release_branches
-            tags:
-              only: /v\d+(\.\d+)*(-.*)*/
-      - shared/docker_amd64:
-          context: *contexts
-          ## <<Stencil::Block(circleDockerAMD64Extra)>>
-
-          ## <</Stencil::Block>>
-          filters:
-            branches:
-              ignore: *release_branches
-            tags:
-              only: /v\d+(\.\d+)*(-.*)*/
-      - shared/docker_arm64:
-          context: *contexts
-          ## <<Stencil::Block(circleDockerArm64Extra)>>
-
-          ## <</Stencil::Block>>
-          filters:
-            branches:
-              ignore: *release_branches
-            tags:
-              only: /v\d+(\.\d+)*(-.*)*/
-)

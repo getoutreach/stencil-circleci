@@ -1,0 +1,4 @@
+# A stand-in for github.com/getoutreach/devbase. The templates of
+# stencil-circleci read only the version of this module, and the tests do not
+# render its templates.
+name: github.com/getoutreach/devbase

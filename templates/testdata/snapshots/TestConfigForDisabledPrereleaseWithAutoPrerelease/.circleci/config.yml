@@ -1,8 +1,8 @@
-(*codegen.File)(# Please re-run stencil after any changes to this file as invalid
+# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@9.99.0
+  shared: getoutreach/shared@dev:first
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
   ## <</Stencil::Block>>
@@ -37,6 +37,7 @@ contexts: &contexts
 test: &test
   context: *contexts
   app_name: testing
+  executor_name: testbed-docker
   ### Start parameters inserted by other modules
   ### End parameters inserted by other modules
   ## <<Stencil::Block(circleTestExtra)>>
@@ -115,8 +116,6 @@ workflows:
       - shared/pre-release: &pre-release
           dryrun: true
           context: *contexts
-          executor_name: oss-docker
-          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
           ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
 
           ## <</Stencil::Block>>
@@ -130,13 +129,12 @@ workflows:
               ignore: *release_branches
       - shared/test:
           <<: *test
-          executor_name: oss-docker
-          docker_image: ghcr.io/getoutreach/bootstrap/ci-oss
           ## <<Stencil::Block(circleSharedTestExtra)>>
 
           ## <</Stencil::Block>>
       - shared/publish_docs:
           context: *contexts
+          executor_name: testbed-docker
           filters:
             branches:
               only:
@@ -186,4 +184,3 @@ workflows:
               ignore: *release_branches
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
-)

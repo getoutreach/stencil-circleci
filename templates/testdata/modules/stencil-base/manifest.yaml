@@ -1,0 +1,27 @@
+# A stand-in for github.com/getoutreach/stencil-base. It has only the
+# arguments that stencil-circleci reads with "from", copied from the manifest
+# of stencil-base at commit 620ca49, and the tests do not render its templates.
+# Update the copy when stencil-circleci reads another argument of stencil-base.
+name: github.com/getoutreach/stencil-base
+arguments:
+  releaseOptions.enabled:
+    description: Whether the repository makes releases.
+    schema:
+      type: boolean
+    default: true
+  releaseOptions.enablePrereleases:
+    description: Enable prereleases
+    schema:
+      type: boolean
+  releaseOptions.prereleasesBranch:
+    description: The branch to watch for prereleases
+    schema:
+      type: string
+  oss:
+    schema:
+      type: boolean
+    description: Whether or not this repository is open source.
+  service:
+    schema:
+      type: boolean
+    description: Whether or not this application is a runnable service. This flag provides the service activity interface and everything necessary for releasing and deploying a service.

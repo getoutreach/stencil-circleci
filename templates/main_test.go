@@ -1,160 +1,136 @@
 package main
 
 import (
-	"maps"
+	"os"
 	"testing"
 
-	"github.com/getoutreach/stencil/pkg/configuration"
-	"github.com/getoutreach/stencil/pkg/stenciltest"
+	"github.com/getoutreach/gobox/pkg/box"
+	"github.com/getoutreach/stencil/pkg/rendertest"
 )
 
-// fakeDockerPullRegistry sets the BOX_DOCKER_PULL_IMAGE_REGISTRY environment
-// variable to a fake value for the duration of the test.
-func fakeDockerPullRegistry(t *testing.T) {
-	t.Helper()
-	t.Setenv("BOX_DOCKER_PULL_IMAGE_REGISTRY", "registry.example.com/foo")
+var suite *rendertest.Suite
+
+func TestMain(m *testing.M) {
+	// The tests render templates of this module only. The dependencies are
+	// stand-ins that have just a manifest: stencil-base provides the arguments
+	// that this module reads with "from", and the templates read only the
+	// version of devbase. Replacing them also keeps the tests off the network.
+	//
+	// A replaced module has the version "local", so the devbase orb version is
+	// always "dev:first". To get another orb version, set the argument
+	// versions.devbase.
+	suite = rendertest.NewSuite(m, rendertest.WithModuleReplacements(map[string]string{
+		"github.com/getoutreach/devbase":      "testdata/modules/devbase",
+		"github.com/getoutreach/stencil-base": "testdata/modules/stencil-base",
+	}))
+	os.Exit(suite.Run())
 }
 
-// fakeECRPullRegistry sets the BOX_DOCKER_PULL_IMAGE_REGISTRY environment
-// variable to a fake ECR value for the duration of the test.
-func fakeECRPullRegistry(t *testing.T) {
-	t.Helper()
-	t.Setenv("BOX_DOCKER_PULL_IMAGE_REGISTRY", "registry.example.amazonaws.com/foo")
-}
-
-// setTestArgs is a helper function to set arguments for the stencil test.
-// In particular, it provides default values for "required" arguments from
-// dependent modules.
-func setTestArgs(st *stenciltest.Template, args map[string]any) {
-	stArgs := map[string]any{
-		"description":   "Service description",
-		"reportingTeam": "foo-bar",
+// boxConfig returns a box config with the CircleCI contexts of the Outreach
+// box configuration, and an image pull registry that is not on AWS.
+func boxConfig() *box.Config {
+	c := &box.Config{}
+	c.Docker.ImagePullRegistry = "registry.example.com/foo"
+	c.CI.CircleCI.Contexts.AWS = "aws-credentials"
+	c.CI.CircleCI.Contexts.Github = "ghaccesstoken"
+	c.CI.CircleCI.Contexts.Docker = "docker-registry"
+	c.CI.CircleCI.Contexts.NPM = "npm-credentials"
+	c.CI.CircleCI.Contexts.ExtraContexts = []string{
+		"box",
+		"vault-dev",
+		"confluence",
+		"circleci-credentials",
+		"tray-webhooks",
+		"wizcli",
+		"datadog",
 	}
-	maps.Copy(stArgs, args)
-	st.Args(stArgs)
+	return c
+}
+
+// newConfigTemplate returns a builder for the CircleCI config template with the
+// given arguments.
+func newConfigTemplate(args ...rendertest.ArgOption) *rendertest.TemplateBuilder {
+	return suite.NewTemplate(".circleci/config.yml.tpl").
+		WithTemplates("_helpers.tpl").
+		WithBoxConfig(boxConfig()).
+		WithArgs(args...)
+}
+
+// render renders the CircleCI config template with the given arguments, and
+// compares the config with its snapshot.
+func render(t *testing.T, args ...rendertest.ArgOption) {
+	t.Helper()
+
+	newConfigTemplate(args...).Run(t).Snapshot(t)
+}
+
+// prereleaseArgs enables prereleases from the given branch.
+func prereleaseArgs(branch string) rendertest.ArgOption {
+	return rendertest.Args(
+		rendertest.NestedArg("releaseOptions.enablePrereleases", true),
+		rendertest.NestedArg("releaseOptions.prereleasesBranch", branch),
+	)
 }
 
 func TestRenderAFile(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"releaseOptions": map[string]any{
-			"enablePrereleases": true,
-			"prereleasesBranch": "main",
-		},
-	})
-	// We don't actually need any templates from devbase, so using a
-	// fake version works here.
-	st.AddModule(&configuration.TemplateRepository{
-		Name:    "github.com/getoutreach/devbase",
-		Version: "v9.99.0",
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	render(t,
+		prereleaseArgs("main"),
+	)
 }
 
 func TestConfigForAutoPrerelease(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"releaseOptions": map[string]any{
-			"enablePrereleases": true,
-			"prereleasesBranch": "main",
-			"autoPrereleases":   true,
-		},
-	})
-	// We don't actually need any templates from devbase, so using a
-	// fake version works here.
-	st.AddModule(&configuration.TemplateRepository{
-		Name:    "github.com/getoutreach/devbase",
-		Version: "v9.99.0",
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	render(t,
+		prereleaseArgs("main"),
+		rendertest.NestedArg("releaseOptions.autoPrereleases", true),
+	)
 }
 
 func TestConfigForDisabledReleases(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"releaseOptions": map[string]any{
-			"enabled": false,
-		},
-	})
-	// We don't actually need any templates from devbase, so using a
-	// fake version works here.
-	st.AddModule(&configuration.TemplateRepository{
-		Name:    "github.com/getoutreach/devbase",
-		Version: "v9.99.0",
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	render(t,
+		rendertest.NestedArg("releaseOptions.enabled", false),
+	)
 }
 
 func TestConfigForDisabledPrerelease(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"releaseOptions": map[string]any{
-			// when enablePrereleases is false, other prerelease options are ignored
-			"enablePrereleases": false,
-		},
-	})
-	// We don't actually need any templates from devbase, so using a
-	// fake version works here.
-	st.AddModule(&configuration.TemplateRepository{
-		Name:    "github.com/getoutreach/devbase",
-		Version: "v9.99.0",
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	// when enablePrereleases is false, other prerelease options are ignored
+	render(t,
+		rendertest.NestedArg("releaseOptions.enablePrereleases", false),
+	)
 }
 
 func TestConfigForDisabledPrereleaseWithAutoPrerelease(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"releaseOptions": map[string]any{
-			"enablePrereleases": false,
-			// The autoPrereleases should be ignored.
-			"autoPrereleases": true,
-		},
-	})
-	// We don't actually need any templates from devbase, so using a
-	// fake version works here.
-	st.AddModule(&configuration.TemplateRepository{
-		Name:    "github.com/getoutreach/devbase",
-		Version: "v9.99.0",
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	render(t,
+		rendertest.NestedArg("releaseOptions.enablePrereleases", false),
+		// The autoPrereleases should be ignored.
+		rendertest.NestedArg("releaseOptions.autoPrereleases", true),
+	)
 }
 
 func TestRenderWithSkipE2eAndDocker(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"releaseOptions": map[string]any{
-			"enablePrereleases": true,
-			"prereleasesBranch": "main",
-		},
-		"versions": map[string]any{
-			"devbase": "my-custom-version",
-		},
-		"ciOptions": map[string]any{
-			"skipE2e":    true,
-			"skipDocker": true,
-		},
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	render(t,
+		prereleaseArgs("main"),
+		rendertest.NestedArg("versions.devbase", "my-custom-version"),
+		rendertest.NestedArg("ciOptions.skipE2e", true),
+		rendertest.NestedArg("ciOptions.skipDocker", true),
+	)
 }
 
 func TestRenderAsOSSRepo(t *testing.T) {
-	fakeDockerPullRegistry(t)
-	st := stenciltest.New(t, ".circleci/config.yml.tpl", "_helpers.tpl")
-	setTestArgs(st, map[string]any{
-		"oss": true,
-	})
-	// We don't actually need any templates from devbase, so using a
-	// fake version works here.
-	st.AddModule(&configuration.TemplateRepository{
-		Name:    "github.com/getoutreach/devbase",
-		Version: "v9.99.0",
-	})
-	st.Run(stenciltest.RegenerateSnapshots())
+	t.Parallel()
+
+	render(t,
+		rendertest.Arg("oss", true),
+	)
 }

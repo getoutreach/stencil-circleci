@@ -1,8 +1,8 @@
-(*codegen.File)(# Please re-run stencil after any changes to this file as invalid
+# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@9.99.0
+  shared: getoutreach/shared@dev:first
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
   ## <</Stencil::Block>>
@@ -98,6 +98,35 @@ workflows:
       ## <</Stencil::Block>>
       ### Start jobs inserted by other modules
       ### End jobs inserted by other modules
+      - shared/release: &release
+          dryrun: false
+          context: *contexts
+          ## <<Stencil::Block(circleReleaseExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circleReleaseRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
+          filters:
+            branches:
+              only: main
+      # Dryrun for PRs
+      - shared/pre-release: &pre-release
+          dryrun: true
+          context: *contexts
+          ## <<Stencil::Block(circlePreReleaseDryRunExtra)>>
+
+          ## <</Stencil::Block>>
+          requires:
+            ## <<Stencil::Block(circlePreReleaseDryRunRequires)>>
+
+            ## <</Stencil::Block>>
+            - shared/test
+          filters:
+            branches:
+              ignore: *release_branches
       - shared/test:
           <<: *test
           ## <<Stencil::Block(circleSharedTestExtra)>>
@@ -155,4 +184,3 @@ workflows:
               ignore: *release_branches
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
-)

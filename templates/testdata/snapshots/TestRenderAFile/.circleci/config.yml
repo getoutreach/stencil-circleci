@@ -1,8 +1,8 @@
-(*codegen.File)(# Please re-run stencil after any changes to this file as invalid
+# Please re-run stencil after any changes to this file as invalid
 # syntax, such as anchors, will be fixed automatically.
 version: 2.1
 orbs:
-  shared: getoutreach/shared@9.99.0
+  shared: getoutreach/shared@dev:first
   ## <<Stencil::Block(CircleCIExtraOrbs)>>
 
   ## <</Stencil::Block>>
@@ -215,4 +215,3 @@ workflows:
               ignore: *release_branches
             tags:
               only: /v\d+(\.\d+)*(-.*)*/
-)
