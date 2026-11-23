@@ -59,8 +59,8 @@ arguments:
     from: github.com/getoutreach/stencil-base
   stencilUpgrade.scheduled:
     description: >-
-      Adds a CircleCI workflow that upgrades the stencil modules on a schedule. This controls
-      only the scheduled job; running stencil by hand is unaffected.
+      Adds CircleCI workflows that upgrade the stencil modules on a schedule and on demand.
+      Running stencil by hand is unaffected.
     schema:
       type: boolean
   stencilUpgrade.cron:
