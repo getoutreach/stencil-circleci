@@ -20,7 +20,7 @@ For usage documentation, see the [docs/](docs/) directory.
 
 ### Scheduled stencil upgrades
 
-Set `stencilUpgrade.scheduled: true` to add a `stencil-upgrade` workflow that runs the `shared/stencil_upgrade` job on a schedule. This argument controls only the scheduled job; running `stencil` by hand is unaffected. Set the `stencil_upgrade` pipeline parameter to `true` to run the job on demand.
+Set `stencilUpgrade.scheduled: true` to add a `stencil-upgrade` workflow that runs the `shared/stencil_upgrade` job on a schedule. This argument controls only the scheduled job; running `stencil` by hand is unaffected. Set the `stencil_upgrade` pipeline parameter to `true` to run the job on demand. The `stencil_upgrade_note` pipeline parameter (a string, empty by default) is passed to the job as `note`. When it is not empty, its Markdown is shown at the top of the pull request description, for example to explain a migration to another vendor.
 
 - `stencilUpgrade.cron`: when the job runs, using cron syntax, in UTC. The default is a time on Thursday between 08:00 and 19:59 UTC, derived from the service name.
 - `stencilUpgrade.forcePR`: passed to the job as `force_pr`. Defaults to `false`.

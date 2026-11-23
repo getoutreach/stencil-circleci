@@ -203,7 +203,8 @@ func TestStencilUpgradeEnabled(t *testing.T) {
 	newStencilUpgradeTest(t, map[string]any{"scheduled": true}).Run(stenciltest.RegenerateSnapshots())
 	snapshot := readSnapshot(t, t.Name())
 	// stencilUpgradeCron for the service name "testing".
-	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:", "force_pr: false"} {
+	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:", "force_pr: false",
+		"stencil_upgrade_note:", "note: << pipeline.parameters.stencil_upgrade_note >>"} {
 		if !strings.Contains(snapshot, want) {
 			t.Errorf("snapshot does not contain %q", want)
 		}

@@ -35,6 +35,9 @@ parameters:
   stencil_upgrade:
     type: boolean
     default: false
+  stencil_upgrade_note:
+    type: string
+    default: ""
   {{- end }}
   ## <<Stencil::Block(CircleCIExtraParams)>>
 {{ file.Block "CircleCIExtraParams" }}
@@ -210,6 +213,7 @@ workflows:
       - shared/stencil_upgrade: &stencil_upgrade
           context: *contexts
           force_pr: {{ stencil.Arg "stencilUpgrade.forcePR" | default false }}
+          note: << pipeline.parameters.stencil_upgrade_note >>
 
   manual-stencil-upgrade:
     when: << pipeline.parameters.stencil_upgrade >>
