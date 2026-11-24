@@ -24,10 +24,6 @@ info:
   x-cortex-git:
     github:
       repository: getoutreach/stencil-circleci
-  x-cortex-oncall:
-    pagerduty:
-      id: P9HJAUT
-      type: SERVICE
   x-cortex-link:
     ## These are useful documentation links for this service. Please fill in the customLinks block if you have additional documentation links.
     ## name: The name of the link
@@ -43,20 +39,23 @@ info:
     app: stencil-circleci
     name: stencil-circleci
     repo: https://github.com/getoutreach/stencil-circleci
+    tier: tier_2
     framework: stencil
     language: Golang
-    stencil_version: v1.44.0
-    golang_version: 1.25.7
+    stencil_version: v1.47.0
+    golang_version: 1.27.4
     cli: false
     service: false
     product: Outreach
-    lifecycle: in_development
+    lifecycle: public_ga
     ## <<Stencil::Block(extraAliases)>>
+
     ## <</Stencil::Block>>
     reporting_team: fnd-dt
     lintroller: platinum
   x-cortex-groups:
-    - lifecycle:in_development
+    - lifecycle:public_ga
+    - tier:tier_2
     - product:Outreach
     - language:Golang
     - framework:stencil
