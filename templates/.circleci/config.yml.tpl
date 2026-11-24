@@ -214,6 +214,9 @@ workflows:
           context: *contexts
           force_pr: {{ stencil.Arg "stencilUpgrade.forcePR" | default false }}
           note: << pipeline.parameters.stencil_upgrade_note >>
+          ## <<Stencil::Block(circleStencilUpgradeExtra)>>
+{{ file.Block "circleStencilUpgradeExtra" }}
+          ## <</Stencil::Block>>
 
   manual-stencil-upgrade:
     when: << pipeline.parameters.stencil_upgrade >>

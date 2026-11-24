@@ -204,7 +204,10 @@ func TestStencilUpgradeEnabled(t *testing.T) {
 	snapshot := readSnapshot(t, t.Name())
 	// stencilUpgradeCron for the service name "testing".
 	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:", "force_pr: false",
-		"stencil_upgrade_note:", "note: << pipeline.parameters.stencil_upgrade_note >>"} {
+		"stencil_upgrade_note:", "note: << pipeline.parameters.stencil_upgrade_note >>",
+		"  stencil_upgrade:\n    type: boolean", "manual-stencil-upgrade:",
+		"when: << pipeline.parameters.stencil_upgrade >>", "- not: << pipeline.parameters.stencil_upgrade >>",
+		"Stencil::Block(circleStencilUpgradeExtra)"} {
 		if !strings.Contains(snapshot, want) {
 			t.Errorf("snapshot does not contain %q", want)
 		}

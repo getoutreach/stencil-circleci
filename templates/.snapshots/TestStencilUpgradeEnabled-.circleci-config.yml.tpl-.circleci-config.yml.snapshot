@@ -107,6 +107,9 @@ workflows:
           context: *contexts
           force_pr: false
           note: << pipeline.parameters.stencil_upgrade_note >>
+          ## <<Stencil::Block(circleStencilUpgradeExtra)>>
+
+          ## <</Stencil::Block>>
 
   manual-stencil-upgrade:
     when: << pipeline.parameters.stencil_upgrade >>
