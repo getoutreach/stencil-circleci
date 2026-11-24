@@ -97,14 +97,8 @@ workflows:
       - shared/save_cache: *test
       - shared/save_e2e_cache: *test
 
-  stencil-upgrade:
-    triggers:
-      - schedule:
-          cron: "59 18 * * 4"
-          filters:
-            branches:
-              only:
-                - main
+  manual-stencil-upgrade:
+    when: << pipeline.parameters.stencil_upgrade >>
     jobs:
       - shared/stencil_upgrade: &stencil_upgrade
           context: *contexts
@@ -114,8 +108,14 @@ workflows:
 
           ## <</Stencil::Block>>
 
-  manual-stencil-upgrade:
-    when: << pipeline.parameters.stencil_upgrade >>
+  stencil-upgrade:
+    triggers:
+      - schedule:
+          cron: "59 18 * * 4"
+          filters:
+            branches:
+              only:
+                - main
     jobs:
       - shared/stencil_upgrade: *stencil_upgrade
 

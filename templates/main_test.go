@@ -191,19 +191,24 @@ func readSnapshot(t *testing.T, testName string) string {
 	return string(b)
 }
 
-func TestStencilUpgradeDisabled(t *testing.T) {
+func TestStencilUpgradeNotScheduled(t *testing.T) {
 	newStencilUpgradeTest(t, nil).Run(stenciltest.RegenerateSnapshots())
 	snapshot := readSnapshot(t, t.Name())
-	for _, unwanted := range []string{"stencil-upgrade", "stencil_upgrade"} {
-		assert.Check(t, !strings.Contains(snapshot, unwanted), "snapshot has %q, but stencilUpgrade.scheduled is not set", unwanted)
+	// The manual trigger does not depend on stencilUpgrade.scheduled.
+	for _, want := range []string{"manual-stencil-upgrade:", "stencil_upgrade_force_pr:", "stencil_upgrade_note:",
+		"when: << pipeline.parameters.stencil_upgrade >>", "- not: << pipeline.parameters.stencil_upgrade >>"} {
+		assert.Check(t, strings.Contains(snapshot, want), "snapshot does not contain %q", want)
 	}
+	// Only the scheduled workflow depends on it.
+	assert.Check(t, !strings.Contains(snapshot, "\n  stencil-upgrade:\n"),
+		"snapshot has the scheduled workflow, but stencilUpgrade.scheduled is not set")
 }
 
 func TestStencilUpgradeEnabled(t *testing.T) {
 	newStencilUpgradeTest(t, map[string]any{"scheduled": true}).Run(stenciltest.RegenerateSnapshots())
 	snapshot := readSnapshot(t, t.Name())
 	// stencilUpgradeCron for the service name "testing".
-	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:",
+	for _, want := range []string{`cron: "59 18 * * 4"`, "\n  stencil-upgrade:\n", "shared/stencil_upgrade:",
 		"force_pr: << pipeline.parameters.stencil_upgrade_force_pr >>", "stencil_upgrade_force_pr:\n    type: boolean",
 		"stencil_upgrade_note:", "note: << pipeline.parameters.stencil_upgrade_note >>",
 		"  stencil_upgrade:\n    type: boolean", "manual-stencil-upgrade:",

@@ -11,6 +11,15 @@ parameters:
   rebuild_cache:
     type: boolean
     default: false
+  stencil_upgrade:
+    type: boolean
+    default: false
+  stencil_upgrade_note:
+    type: string
+    default: ""
+  stencil_upgrade_force_pr:
+    type: boolean
+    default: false
   ## <<Stencil::Block(CircleCIExtraParams)>>
 
   ## <</Stencil::Block>>
@@ -87,10 +96,22 @@ workflows:
       - shared/save_cache: *test
       - shared/save_e2e_cache: *test
 
+  manual-stencil-upgrade:
+    when: << pipeline.parameters.stencil_upgrade >>
+    jobs:
+      - shared/stencil_upgrade: &stencil_upgrade
+          context: *contexts
+          force_pr: << pipeline.parameters.stencil_upgrade_force_pr >>
+          note: << pipeline.parameters.stencil_upgrade_note >>
+          ## <<Stencil::Block(circleStencilUpgradeExtra)>>
+
+          ## <</Stencil::Block>>
+
   release:
     when:
       and:
         - not: << pipeline.parameters.rebuild_cache >>
+        - not: << pipeline.parameters.stencil_upgrade >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 

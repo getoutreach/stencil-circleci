@@ -65,8 +65,8 @@ arguments:
       type: string
   stencilUpgrade.scheduled:
     description: >-
-      Adds CircleCI workflows that upgrade the stencil modules on a schedule and on demand.
-      Running stencil by hand is unaffected.
+      Adds a CircleCI workflow that upgrades the stencil modules on a schedule. The workflow that
+      runs the upgrade on demand always exists. Running stencil by hand is unaffected.
     schema:
       type: boolean
   versions.devbase:

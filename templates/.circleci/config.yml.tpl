@@ -31,7 +31,6 @@ parameters:
     type: boolean
     default: false
   {{- end }}
-  {{- if $stencilUpgrade }}
   stencil_upgrade:
     type: boolean
     default: false
@@ -41,7 +40,6 @@ parameters:
   stencil_upgrade_force_pr:
     type: boolean
     default: false
-  {{- end }}
   ## <<Stencil::Block(CircleCIExtraParams)>>
 {{ file.Block "CircleCIExtraParams" }}
   ## <</Stencil::Block>>
@@ -202,6 +200,17 @@ workflows:
           ## <</Stencil::Block>>
   {{- end }}
 
+  manual-stencil-upgrade:
+    when: << pipeline.parameters.stencil_upgrade >>
+    jobs:
+      - shared/stencil_upgrade: &stencil_upgrade
+          context: *contexts
+          force_pr: << pipeline.parameters.stencil_upgrade_force_pr >>
+          note: << pipeline.parameters.stencil_upgrade_note >>
+          ## <<Stencil::Block(circleStencilUpgradeExtra)>>
+{{ file.Block "circleStencilUpgradeExtra" }}
+          ## <</Stencil::Block>>
+
   {{- if $stencilUpgrade }}
 
   stencil-upgrade:
@@ -213,17 +222,6 @@ workflows:
               only:
                 - {{ $defaultBranch }}
     jobs:
-      - shared/stencil_upgrade: &stencil_upgrade
-          context: *contexts
-          force_pr: << pipeline.parameters.stencil_upgrade_force_pr >>
-          note: << pipeline.parameters.stencil_upgrade_note >>
-          ## <<Stencil::Block(circleStencilUpgradeExtra)>>
-{{ file.Block "circleStencilUpgradeExtra" }}
-          ## <</Stencil::Block>>
-
-  manual-stencil-upgrade:
-    when: << pipeline.parameters.stencil_upgrade >>
-    jobs:
       - shared/stencil_upgrade: *stencil_upgrade
   {{- end }}
 
@@ -234,9 +232,7 @@ workflows:
         {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
         - not: << pipeline.parameters.release_rc >>
         {{- end }}
-        {{- if $stencilUpgrade }}
         - not: << pipeline.parameters.stencil_upgrade >>
-        {{- end }}
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}

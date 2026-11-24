@@ -22,14 +22,14 @@ ciOptions:
 
 ## `stencilUpgrade.scheduled`
 
-Adds a `stencil-upgrade` workflow that runs the `shared/stencil_upgrade` job on a schedule, and a `manual-stencil-upgrade` workflow that runs it on demand. Running `stencil` by hand is not affected. The [devbase docs](https://github.com/getoutreach/devbase/blob/main/docs/stencil-upgrade.md) describe what the job does.
+Adds a `stencil-upgrade` workflow that runs the `shared/stencil_upgrade` job on a schedule. Running `stencil` by hand is not affected. The [devbase docs](https://github.com/getoutreach/devbase/blob/main/docs/stencil-upgrade.md) describe what the job does.
 
 ```yaml
 stencilUpgrade:
   scheduled: true
 ```
 
-To start the manual workflow, set the `stencil_upgrade` pipeline parameter (boolean) to `true` when you trigger a pipeline in the CircleCI web app or with the CircleCI API.
+The `manual-stencil-upgrade` workflow, which runs the same job on demand, always exists, whatever the value of this argument. To start it, set the `stencil_upgrade` pipeline parameter (boolean) to `true` when you trigger a pipeline in the CircleCI web app or with the CircleCI API.
 
 The `stencil_upgrade_note` pipeline parameter (string, empty by default) is passed to the job as `note`. The `stencil_upgrade_force_pr` pipeline parameter (boolean, `false` by default) is passed as `force_pr`. Set them together with `stencil_upgrade`. The devbase docs describe `note` and `force_pr`. The schedule does not set them, so the defaults apply.
 
