@@ -1,29 +1,29 @@
-version: v1.44.0
+version: v1.47.0
 modules:
     - name: github.com/getoutreach/devbase
       url: https://github.com/getoutreach/devbase
-      version: v2.39.1
+      version: v2.41.0-rc.12
     - name: github.com/getoutreach/stencil-base
       url: https://github.com/getoutreach/stencil-base
-      version: v0.19.1
+      version: v0.22.0-rc.1
     - name: github.com/getoutreach/stencil-circleci
       url: file://./
       version: local
     - name: github.com/getoutreach/stencil-discovery
       url: https://github.com/getoutreach/stencil-discovery
-      version: v1.9.1-rc.1
+      version: v1.9.1
     - name: github.com/getoutreach/stencil-golang
       url: https://github.com/getoutreach/stencil-golang
-      version: v1.33.0
+      version: v1.37.0-rc.5
     - name: github.com/getoutreach/stencil-outreach
       url: https://github.com/getoutreach/stencil-outreach
-      version: v0.31.0
+      version: v0.35.0-rc.7
     - name: github.com/getoutreach/stencil-pipeline
       url: https://github.com/getoutreach/stencil-pipeline
       version: v1.2.9
     - name: github.com/getoutreach/stencil-template-base
       url: https://github.com/getoutreach/stencil-template-base
-      version: v0.5.0
+      version: v0.6.0-rc.1
 files:
     - name: .circleci/config.yml
       template: .circleci/config.yml.tpl
@@ -73,12 +73,18 @@ files:
     - name: .vscode/settings.json
       template: .vscode/settings.json.tpl
       module: github.com/getoutreach/stencil-golang
+    - name: AGENTS.md
+      template: AGENTS.md.tpl
+      module: github.com/getoutreach/stencil-base
     - name: Makefile
       template: Makefile.tpl
       module: github.com/getoutreach/stencil-golang
     - name: cortex.yaml
       template: cortex.yaml.tpl
       module: github.com/getoutreach/stencil-outreach
+    - name: docs/agents/stencil-commands.md
+      template: docs/agents/stencil-commands.md.tpl
+      module: github.com/getoutreach/stencil-base
     - name: go.mod
       template: go.mod.tpl
       module: github.com/getoutreach/stencil-golang
