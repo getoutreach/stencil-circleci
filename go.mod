@@ -7,6 +7,7 @@ go 1.27.4
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
 	github.com/getoutreach/stencil v1.47.0
+	gotest.tools/v3 v3.5.2
 )
 
 require (
@@ -96,6 +97,5 @@ require (
 	google.golang.org/grpc v1.85.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gotest.tools/v3 v3.5.2 // indirect
 	sigs.k8s.io/yaml v1.6.0 // indirect
 )

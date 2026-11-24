@@ -9,6 +9,7 @@ import (
 
 	"github.com/getoutreach/stencil/pkg/configuration"
 	"github.com/getoutreach/stencil/pkg/stenciltest"
+	"gotest.tools/v3/assert"
 )
 
 // fakeDockerPullRegistry sets the BOX_DOCKER_PULL_IMAGE_REGISTRY environment
@@ -186,16 +187,15 @@ func newStencilUpgradeTest(t *testing.T, stencilUpgrade map[string]any) *stencil
 func readSnapshot(t *testing.T, testName string) string {
 	t.Helper()
 	b, err := os.ReadFile(filepath.Join(".snapshots", testName+"-.circleci-config.yml.tpl-.circleci-config.yml.snapshot"))
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.NilError(t, err)
 	return string(b)
 }
 
 func TestStencilUpgradeDisabled(t *testing.T) {
 	newStencilUpgradeTest(t, nil).Run(stenciltest.RegenerateSnapshots())
-	if snapshot := readSnapshot(t, t.Name()); strings.Contains(snapshot, "stencil-upgrade") || strings.Contains(snapshot, "stencil_upgrade") {
-		t.Error("snapshot has stencil-upgrade config, but stencilUpgrade.scheduled is not set")
+	snapshot := readSnapshot(t, t.Name())
+	for _, unwanted := range []string{"stencil-upgrade", "stencil_upgrade"} {
+		assert.Check(t, !strings.Contains(snapshot, unwanted), "snapshot has %q, but stencilUpgrade.scheduled is not set", unwanted)
 	}
 }
 
@@ -208,22 +208,18 @@ func TestStencilUpgradeEnabled(t *testing.T) {
 		"  stencil_upgrade:\n    type: boolean", "manual-stencil-upgrade:",
 		"when: << pipeline.parameters.stencil_upgrade >>", "- not: << pipeline.parameters.stencil_upgrade >>",
 		"Stencil::Block(circleStencilUpgradeExtra)"} {
-		if !strings.Contains(snapshot, want) {
-			t.Errorf("snapshot does not contain %q", want)
-		}
+		assert.Check(t, strings.Contains(snapshot, want), "snapshot does not contain %q", want)
 	}
 }
 
 func TestStencilUpgradeCronOverride(t *testing.T) {
 	newStencilUpgradeTest(t, map[string]any{"scheduled": true, "cron": "0 5 * * 1"}).Run(stenciltest.RegenerateSnapshots())
-	if snapshot := readSnapshot(t, t.Name()); !strings.Contains(snapshot, `cron: "0 5 * * 1"`) {
-		t.Error("snapshot does not contain the stencilUpgrade.cron value")
-	}
+	snapshot := readSnapshot(t, t.Name())
+	assert.Check(t, strings.Contains(snapshot, `cron: "0 5 * * 1"`), "snapshot does not contain the stencilUpgrade.cron value")
 }
 
 func TestStencilUpgradeForcePR(t *testing.T) {
 	newStencilUpgradeTest(t, map[string]any{"scheduled": true, "forcePR": true}).Run(stenciltest.RegenerateSnapshots())
-	if snapshot := readSnapshot(t, t.Name()); !strings.Contains(snapshot, "force_pr: true") {
-		t.Error("snapshot does not contain force_pr: true")
-	}
+	snapshot := readSnapshot(t, t.Name())
+	assert.Check(t, strings.Contains(snapshot, "force_pr: true"), "snapshot does not contain force_pr: true")
 }
