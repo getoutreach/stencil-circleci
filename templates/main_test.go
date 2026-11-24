@@ -203,7 +203,8 @@ func TestStencilUpgradeEnabled(t *testing.T) {
 	newStencilUpgradeTest(t, map[string]any{"scheduled": true}).Run(stenciltest.RegenerateSnapshots())
 	snapshot := readSnapshot(t, t.Name())
 	// stencilUpgradeCron for the service name "testing".
-	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:", "force_pr: false",
+	for _, want := range []string{`cron: "59 18 * * 4"`, "shared/stencil_upgrade:",
+		"force_pr: << pipeline.parameters.stencil_upgrade_force_pr >>", "stencil_upgrade_force_pr:\n    type: boolean",
 		"stencil_upgrade_note:", "note: << pipeline.parameters.stencil_upgrade_note >>",
 		"  stencil_upgrade:\n    type: boolean", "manual-stencil-upgrade:",
 		"when: << pipeline.parameters.stencil_upgrade >>", "- not: << pipeline.parameters.stencil_upgrade >>",
@@ -216,10 +217,4 @@ func TestStencilUpgradeCronOverride(t *testing.T) {
 	newStencilUpgradeTest(t, map[string]any{"scheduled": true, "cron": "0 5 * * 1"}).Run(stenciltest.RegenerateSnapshots())
 	snapshot := readSnapshot(t, t.Name())
 	assert.Check(t, strings.Contains(snapshot, `cron: "0 5 * * 1"`), "snapshot does not contain the stencilUpgrade.cron value")
-}
-
-func TestStencilUpgradeForcePR(t *testing.T) {
-	newStencilUpgradeTest(t, map[string]any{"scheduled": true, "forcePR": true}).Run(stenciltest.RegenerateSnapshots())
-	snapshot := readSnapshot(t, t.Name())
-	assert.Check(t, strings.Contains(snapshot, "force_pr: true"), "snapshot does not contain force_pr: true")
 }

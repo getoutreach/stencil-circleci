@@ -31,7 +31,7 @@ stencilUpgrade:
 
 To start the manual workflow, set the `stencil_upgrade` pipeline parameter (boolean) to `true` when you trigger a pipeline in the CircleCI web app or with the CircleCI API.
 
-The `stencil_upgrade_note` pipeline parameter (string, empty by default) is passed to the job as `note`. Set it together with `stencil_upgrade`. The devbase docs describe `note`. The schedule does not set it, so the default applies.
+The `stencil_upgrade_note` pipeline parameter (string, empty by default) is passed to the job as `note`. The `stencil_upgrade_force_pr` pipeline parameter (boolean, `false` by default) is passed as `force_pr`. Set them together with `stencil_upgrade`. The devbase docs describe `note` and `force_pr`. The schedule does not set them, so the defaults apply.
 
 ## `stencilUpgrade.cron`
 
@@ -40,13 +40,4 @@ The time when the scheduled `stencil-upgrade` workflow runs, in cron syntax and 
 ```yaml
 stencilUpgrade:
   cron: "0 5 * * 1"
-```
-
-## `stencilUpgrade.forcePR`
-
-Passes `force_pr` to the `shared/stencil_upgrade` job in both workflows. It applies when `stencilUpgrade.scheduled` is `true`. The default is `false`. The devbase docs describe `force_pr`.
-
-```yaml
-stencilUpgrade:
-  forcePR: true
 ```

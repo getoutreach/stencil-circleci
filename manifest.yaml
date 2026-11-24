@@ -63,12 +63,6 @@ arguments:
       stencilUpgrade.scheduled is true. Defaults to a time on Thursday derived from the service name.
     schema:
       type: string
-  stencilUpgrade.forcePR:
-    description: >-
-      Passes force_pr to the stencil-upgrade job, if stencilUpgrade.scheduled is true.
-    default: false
-    schema:
-      type: boolean
   stencilUpgrade.scheduled:
     description: >-
       Adds CircleCI workflows that upgrade the stencil modules on a schedule and on demand.
