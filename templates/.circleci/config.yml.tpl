@@ -5,6 +5,7 @@ version: 2.1
 {{- $prereleaseBranch := stencil.Arg "releaseOptions.prereleasesBranch" }}
 {{- $defaultBranch := .Git.DefaultBranch | default "main" }}
 {{- $releaseFailureSlackChannel :=  stencil.Arg "notifications.slackChannel" }}
+{{- $stencilUpgrade := stencil.Arg "stencilUpgrade.scheduled" }}
 {{- $executorName := "" }}
 {{- if contains "amazonaws.com" .Runtime.Box.Docker.ImagePullRegistry }}
 {{- $executorName = "testbed-docker-aws" }}
@@ -30,6 +31,15 @@ parameters:
     type: boolean
     default: false
   {{- end }}
+  stencil_upgrade:
+    type: boolean
+    default: false
+  stencil_upgrade_note:
+    type: string
+    default: ""
+  stencil_upgrade_force_pr:
+    type: boolean
+    default: false
   ## <<Stencil::Block(CircleCIExtraParams)>>
 {{ file.Block "CircleCIExtraParams" }}
   ## <</Stencil::Block>>
@@ -190,6 +200,31 @@ workflows:
           ## <</Stencil::Block>>
   {{- end }}
 
+  manual-stencil-upgrade:
+    when: << pipeline.parameters.stencil_upgrade >>
+    jobs:
+      - shared/stencil_upgrade: &stencil_upgrade
+          context: *contexts
+          force_pr: << pipeline.parameters.stencil_upgrade_force_pr >>
+          note: << pipeline.parameters.stencil_upgrade_note >>
+          ## <<Stencil::Block(circleStencilUpgradeExtra)>>
+{{ file.Block "circleStencilUpgradeExtra" }}
+          ## <</Stencil::Block>>
+
+  {{- if $stencilUpgrade }}
+
+  stencil-upgrade:
+    triggers:
+      - schedule:
+          cron: {{ stencil.Arg "stencilUpgrade.cron" | default (stencil.ApplyTemplate "stencilUpgradeCron" .Config.Name) | quote }}
+          filters:
+            branches:
+              only:
+                - {{ $defaultBranch }}
+    jobs:
+      - shared/stencil_upgrade: *stencil_upgrade
+  {{- end }}
+
   release:
     when:
       and:
@@ -197,6 +232,7 @@ workflows:
         {{- if stencil.Arg "releaseOptions.enablePrereleases" }}
         - not: << pipeline.parameters.release_rc >>
         {{- end }}
+        - not: << pipeline.parameters.stencil_upgrade >>
     jobs:
       ## <<Stencil::Block(circleWorkflowJobs)>>
 {{ file.Block "circleWorkflowJobs" }}
