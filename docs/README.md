@@ -29,3 +29,5 @@ Docker images are built by the [`ci/release/docker.sh`](https://github.com/getou
 ## E2E
 
 E2E tests use the runner that lives in [devbase](https://github.com/getoutreach/devbase/tree/main/e2e). The E2E runner only supports go tests currently, however other tests could be shimmed in if needed. An E2E environment is provisioned using a [devenv](https://github.com/getoutreach/devenv). The application is then deployed into the devenv, if applicable, and E2E tests are ran.
+
+On draft pull requests, `shared/e2e` skips its tests unless the pull request has the `run-e2e` label. Repositories with E2E enabled get a `.github/workflows/rerun-e2e.yaml` GitHub Actions workflow, which re-runs `shared/e2e` when a pull request is marked ready for review or gets the `run-e2e` label. Open source repositories don't get this workflow, because it needs the `CIRCLECI_API_TOKEN` organization secret.
